@@ -1,4 +1,6 @@
-﻿Public Class Form1
+﻿Imports System.Timers
+
+Public Class Form1
     Dim paleta As Paddle
     Dim minge As Ball
     Dim perete As Wall
@@ -25,12 +27,18 @@
     End Function
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        paleta = New Paddle(80, 15, Me.ClientSize.Width, Me.ClientSize.Height, Pens.BlueViolet)
+        ballTimer = New Timer(100)
+        ' Hook up the Elapsed event for the timer. 
+        AddHandler ballTimer.Elapsed, AddressOf OnTimedEvent
+        ballTimer.AutoReset = True
+        ballTimer.Enabled = True
+
+        paleta = New Paddle(90, 10, Me.ClientSize.Width, Me.ClientSize.Height, Pens.DarkViolet)
         minge = New Ball(25, Me.ClientSize.Width, Me.ClientSize.Height, Pens.Red)
         perete = New Wall(12, 8, 43, 20, 5, 5)
         vieti = 3
 
-        minge.SetPosition(Me.Size.Width / 2 - 12, paleta.y - 20)
+        minge.SetPosition(Me.Size.Width / 2 - minge.radius, paleta.y - minge.radius + paleta.spacev)
     End Sub
 
     Private Sub Form1_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
@@ -39,5 +47,9 @@
         paleta.Draw(e)
         minge.Draw(e)
         perete.Draw(e)
+    End Sub
+    Private Sub OnTimedEvent(source As Object, e As ElapsedEventArgs)
+        Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}",
+                          e.SignalTime)
     End Sub
 End Class
