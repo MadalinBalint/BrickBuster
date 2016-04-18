@@ -7,13 +7,14 @@
 
     ' Functie pentru miscarea paletei
     Protected Overrides Function ProcessCmdKey(ByRef msg As Message, ByVal keyData As Keys) As Boolean
-        'handle your keys here
+        ' Tasta stanga
         If keyData = Keys.Left Then
             paleta.Move(-15, 0)
             Me.Refresh()
             Return True
         End If
 
+        ' Tasta dreapta
         If keyData = Keys.Right Then
             paleta.Move(15, 0)
             Me.Refresh()
@@ -24,8 +25,8 @@
     End Function
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        paleta = New Paddle(80, 15, Me.Size.Width, Me.Size.Height, Pens.BlueViolet)
-        minge = New Ball(25, Pens.Red)
+        paleta = New Paddle(80, 15, Me.ClientSize.Width, Me.ClientSize.Height, Pens.BlueViolet)
+        minge = New Ball(25, Me.ClientSize.Width, Me.ClientSize.Height, Pens.Red)
         perete = New Wall(12, 8, 43, 20, 5, 5)
         vieti = 3
 
@@ -34,6 +35,7 @@
 
     Private Sub Form1_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
         minge.Move()
+        minge.Bounce()
         paleta.Draw(e)
         minge.Draw(e)
         perete.Draw(e)

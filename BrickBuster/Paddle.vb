@@ -11,7 +11,7 @@
         formh = fh
         color = p
         x = (formw - w) / 2
-        y = formh - h - 40 - 10
+        y = formh - h - 10
     End Sub
 
     Public Sub Draw(e As PaintEventArgs)
@@ -28,7 +28,7 @@
         ' Verficam daca paleta noastra nu iese din ecranul jocului
         If x < 0 Then x = 0
         If y < 0 Then y = 0
-        If x >= formw - w - 15 Then x = formw - w - 15
+        If x >= formw - w Then x = formw - w
         If y >= formh Then y = formh - h
     End Sub
 End Class
