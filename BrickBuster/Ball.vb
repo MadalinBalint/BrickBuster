@@ -6,13 +6,15 @@
     Public speed As Double ' Factorul de viteza al bilei (x1.0)
     Public angle As Double ' Unghiul sub care se misca bila (radiani)
     Public width, height As Integer ' Dimensiunea ferestrei in interiorul careia se misca bila
+    Public isMoving As Boolean = False ' Atunci cand se afla in miscare
+    Public stopped As Boolean = False ' Atunci cand atinge partea de jos a ecranului
 
     ' Constructorul pentru clasa Ball
     Public Sub New(r As Integer, fw As Integer, fh As Integer, p As Pen)
         radius = r
         culoare = p
         angle = Math.PI / 4
-        speed = 8.0
+        speed = 4.0
         width = fw
         height = fh
     End Sub
@@ -31,8 +33,6 @@
 
     ' Reflecta bila atunci cand intalneste un obstacol
     Public Sub Bounce()
-        ' Reflexie paleta
-
         ' Reflexie perete
         If x >= width - radius Then
             x = 2 * (width - radius) - x
@@ -43,6 +43,7 @@
         ElseIf y >= height - radius Then
             y = 2 * (height - radius) - y
             angle = Math.PI - angle
+            stopped = True
         ElseIf y <= 0 Then
             y = 0
             angle = Math.PI - angle
@@ -52,7 +53,7 @@
     ' Deseneaza bila pe ecran
     Sub Draw(e As PaintEventArgs)
         Dim brush As New SolidBrush(culoare.Color)
-        Dim gray As New SolidBrush(Color.LightGray)
+        'Dim gray As New SolidBrush(Color.LightGray)
 
         ' Umbra mingii
         'e.Graphics.FillEllipse(gray, x + 3, y + 2 + 5, radius + 2, radius - 5)
