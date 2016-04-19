@@ -4,12 +4,16 @@
     Public perete As Wall
     Public vieti As Integer
     Public scor As Integer
-    Public paddleMovement As Integer = 20
+    Public paddleMovement As Integer = 25
+    Public isGamePaused As Boolean = False
 
     ' Functie pentru miscarea paletei
     Protected Overrides Function ProcessCmdKey(ByRef msg As Message, ByVal keyData As Keys) As Boolean
         ' Tasta stanga
         If keyData = Keys.Left Then
+            ' Daca am pus pauza ignoram tasta
+            If isGamePaused = True Then Return True
+
             paleta.Move(-paddleMovement, 0)
             If minge.isMoving = False Then
                 ' Miscam mingea odata cu paleta, doar daca si paleta se misca
@@ -22,6 +26,9 @@
 
         ' Tasta dreapta
         If keyData = Keys.Right Then
+            ' Daca am pus pauza ignoram tasta
+            If isGamePaused = True Then Return True
+
             paleta.Move(paddleMovement, 0)
             If minge.isMoving = False Then
                 ' Miscam mingea odata cu paleta, doar daca si paleta se misca
@@ -34,8 +41,18 @@
 
         ' Tasta Spacebar = elibereaza mingea si aceasta incepe sa se miste
         If keyData = Keys.Space Then
+            ' Daca am pus pauza ignoram tasta
+            If isGamePaused = True Then Return True
+
             If minge.isMoving = True Then Return True
             minge.isMoving = True
+            Return True
+        End If
+
+        ' Tasta P = pauza
+        If keyData = Keys.P Then
+            isGamePaused = Not isGamePaused
+            Return True
         End If
 
         Return False
@@ -69,9 +86,11 @@
             ' Pozitionam mingea fix centrata pe mijlocul unde se regaseste in acel moment paleta
             minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius)
         End If
-        If minge.isMoving = True Then
+
+        ' Daca am pus pauza nu mai miscam mingea
+        If minge.isMoving = True And isGamePaused = False Then
             minge.Move()
-            minge.Bounce()
+            minge.Bounce(paleta)
         End If
 
         paleta.Draw(e)

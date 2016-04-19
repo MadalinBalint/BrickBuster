@@ -32,9 +32,16 @@
     End Sub
 
     ' Reflecta bila atunci cand intalneste un obstacol
-    Public Sub Bounce()
-        ' Reflexie perete
-        If x >= width - radius Then
+    Public Sub Bounce(paleta As Paddle)
+        'If isMoving = False Then Return
+
+        If y >= paleta.y - radius Then ' Reflexie paleta
+            If x >= paleta.x And x <= paleta.x + paleta.w Then
+                y = 2 * (paleta.y - radius) - y
+                angle = Math.PI - angle
+            End If
+        End If
+        If x >= width - radius Then ' Reflexie perete
             x = 2 * (width - radius) - x
             angle = -angle
         ElseIf x <= 0 Then

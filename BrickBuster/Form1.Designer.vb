@@ -41,7 +41,10 @@ Partial Class Form1
         Me.KeyPreview = True
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "Form1"
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "BrickBuster"
+        Me.TopMost = True
         Me.ResumeLayout(False)
 
     End Sub
