@@ -138,9 +138,10 @@
 
     ' Determina cu ce caramida se intersecteaza mingea in pozitia ei actuala
     ' Returneaza caramida cu care se intersecteaza, altfel NULL
-    Public Function Collision(minge As Ball) As Brick
+    Public Function Collision(minge As Ball) As List(Of Brick)
         Dim caramida As Brick
         Dim mijloc As PointF
+        Dim lista = New List(Of Brick)
 
         For j As Integer = 0 To row - 1
             For i As Integer = 0 To col - 1
@@ -150,12 +151,12 @@
                     mijloc = matrixMiddle(i, j)
 
                     ' Daca ne intersectam cu o caramida o returnam
-                    If Intersection(minge, caramida, mijloc) = True Then Return caramida
+                    If Intersection(minge, caramida, mijloc) = True Then lista.Add(caramida)
                 End If
             Next
         Next
 
-        Return Nothing
+        Return lista
     End Function
 
     Public Sub SetBrickColor(position As Integer, color As Pen)

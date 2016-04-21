@@ -2,7 +2,7 @@
     Public paleta As Paddle ' paleta cu care lovim mingea
     Public minge As Ball ' mingea propriu-zisa
     Public perete As Wall ' peretele nostru format din mai multe caramizi
-    Public caramida As Brick ' caramida de care se loveste mingea
+    Public caramizi As List(Of Brick) ' caramida de care se loveste mingea
     Public vieti As Integer ' cate vieti au mai ramas jucatorului
     Public scor As Integer ' scorul acumulat
     Public paddleMovement As Integer = 25  ' cu cat se poate misca paleta stanga sau dreapta
@@ -47,6 +47,11 @@
 
             If minge.isMoving = True Then Return True
             minge.isMoving = True
+
+            ' Lasam in stanga si dreapta o margine de 40 pixeli unde unghiul mingii va fi acelasi
+            ' Vom avea un FOV de 90 grade
+            minge.angle = paleta.GetAngle(40, Math.PI / 1.5)
+
             Return True
         End If
 
@@ -63,7 +68,7 @@
         paleta = New Paddle(90, 15, Me.ClientSize.Width, Me.ClientSize.Height, Pens.LemonChiffon)
         minge = New Ball(20, Me.ClientSize.Width, Me.ClientSize.Height, Pens.Red)
         perete = New Wall(12, 8, 43, 20, 5, 5)
-        vieti = 3
+        vieti = 10
 
         'minge.SetPosition((Me.ClientSize.Width - minge.radius) \ 2, paleta.y - minge.radius)
         minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius - 2)
@@ -71,13 +76,13 @@
     End Sub
 
     Private Sub Form1_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
-        caramida = perete.Collision(minge)
+        caramizi = perete.Collision(minge)
 
-        ' Daca ne-am lovit de o caramida
-        If IsNothing(caramida) = False Then
+        ' Daca ne-am lovit de una sau mai multe caramizi
+        For Each caramida In caramizi
             Console.WriteLine("Am detectat caramida {0}", caramida.position)
             perete.SetBrickColor(caramida.position, Pens.YellowGreen)
-        End If
+        Next
 
         ' Daca cumva atingem partea de jos a ecranului, pierdem o viata
         If minge.stopped = True Then
@@ -93,7 +98,10 @@
 
             minge.stopped = False
             minge.isMoving = False
-            minge.angle = Math.PI / 4
+
+            ' Lasam in stanga si dreapta o margine de 40 pixeli unde unghiul mingii va fi acelasi
+            ' Vom avea un FOV de 90 grade
+            minge.angle = paleta.GetAngle(40, Math.PI / 1.5)
 
             ' Pozitionam mingea fix centrata pe mijlocul unde se regaseste in acel moment paleta
             minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius - 2)

@@ -14,7 +14,7 @@
         color = p
 
         ' Centram paleta noastra si o punem cu 5 pixeli mai sus decat marginea de jos a ferestrei 
-        x = (formw - w) / 2
+        x = (formw - w) / 2.0
         y = formh - h - spacev
     End Sub
 
@@ -49,4 +49,14 @@
             isMoving = False
         End If
     End Sub
+
+    ' Returneaza unghiul sub care se reflecta mingea atunci cand loveste paleta
+    ' Cand paleta e centrata mingea se reflecta sub 90 grade indiferent de ce limita sau FOV am setat
+    Public Function GetAngle(limit As Integer, fov As Single) As Single
+        Dim minAngle = (Math.PI - fov) / 2
+
+        If x < limit Or x > formw - limit Then Return minAngle
+
+        Return (fov - Math.PI / 2.0) * (1.0 - (x + w / 2.0) / (formw / 2.0))
+    End Function
 End Class

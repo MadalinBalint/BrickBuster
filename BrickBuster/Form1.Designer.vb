@@ -36,7 +36,7 @@ Partial Class Form1
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.ClientSize = New System.Drawing.Size(779, 553)
+        Me.ClientSize = New System.Drawing.Size(772, 553)
         Me.DoubleBuffered = True
         Me.KeyPreview = True
         Me.Margin = New System.Windows.Forms.Padding(4)

@@ -11,7 +11,6 @@
         y = yy
         color = p
         position = pos
-        'Console.WriteLine("Punem caramida cu pozitia {0}", position)
     End Sub
 
     Public Sub SetType(t As Integer)
