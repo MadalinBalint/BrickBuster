@@ -44,7 +44,6 @@ Partial Class Form1
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "BrickBuster"
-        Me.TopMost = True
         Me.ResumeLayout(False)
 
     End Sub

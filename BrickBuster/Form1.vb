@@ -1,11 +1,12 @@
 ﻿Public Class Form1
-    Public paleta As Paddle
-    Public minge As Ball
-    Public perete As Wall
-    Public vieti As Integer
-    Public scor As Integer
-    Public paddleMovement As Integer = 25
-    Public isGamePaused As Boolean = False
+    Public paleta As Paddle ' paleta cu care lovim mingea
+    Public minge As Ball ' mingea propriu-zisa
+    Public perete As Wall ' peretele nostru format din mai multe caramizi
+    Public caramida As Brick ' caramida de care se loveste mingea
+    Public vieti As Integer ' cate vieti au mai ramas jucatorului
+    Public scor As Integer ' scorul acumulat
+    Public paddleMovement As Integer = 25  ' cu cat se poate misca paleta stanga sau dreapta
+    Public isGamePaused As Boolean = False ' daca jocul a fost pus pe pauza
 
     ' Functie pentru miscarea paletei
     Protected Overrides Function ProcessCmdKey(ByRef msg As Message, ByVal keyData As Keys) As Boolean
@@ -18,7 +19,7 @@
             If minge.isMoving = False Then
                 ' Miscam mingea odata cu paleta, doar daca si paleta se misca
                 If paleta.isMoving = True Then
-                    minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius)
+                    minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius - 2)
                 End If
             End If
             Return True
@@ -33,7 +34,7 @@
             If minge.isMoving = False Then
                 ' Miscam mingea odata cu paleta, doar daca si paleta se misca
                 If paleta.isMoving = True Then
-                    minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius)
+                    minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius - 2)
                 End If
             End If
             Return True
@@ -60,18 +61,28 @@
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         paleta = New Paddle(90, 15, Me.ClientSize.Width, Me.ClientSize.Height, Pens.LemonChiffon)
-        minge = New Ball(25, Me.ClientSize.Width, Me.ClientSize.Height, Pens.Red)
+        minge = New Ball(20, Me.ClientSize.Width, Me.ClientSize.Height, Pens.Red)
         perete = New Wall(12, 8, 43, 20, 5, 5)
         vieti = 3
 
         'minge.SetPosition((Me.ClientSize.Width - minge.radius) \ 2, paleta.y - minge.radius)
-        minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius)
+        minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius - 2)
+        Me.Text = "BrickBuster - " & vieti & " vieti - " & scor & " puncte"
     End Sub
 
     Private Sub Form1_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
+        caramida = perete.Collision(minge)
+
+        ' Daca ne-am lovit de o caramida
+        If IsNothing(caramida) = False Then
+            Console.WriteLine("Am detectat caramida {0}", caramida.position)
+            perete.SetBrickColor(caramida.position, Pens.YellowGreen)
+        End If
+
         ' Daca cumva atingem partea de jos a ecranului, pierdem o viata
         If minge.stopped = True Then
             vieti -= 1
+            Me.Text = "BrickBuster - " & vieti & " vieti - " & scor & " puncte"
 
             ' Am terminat toate vietile, afisam mesaj si terminam programul
             If vieti <= 0 Then
@@ -82,9 +93,10 @@
 
             minge.stopped = False
             minge.isMoving = False
+            minge.angle = Math.PI / 4
 
             ' Pozitionam mingea fix centrata pe mijlocul unde se regaseste in acel moment paleta
-            minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius)
+            minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius - 2)
         End If
 
         ' Daca am pus pauza nu mai miscam mingea
@@ -96,9 +108,9 @@
         paleta.Draw(e)
         minge.Draw(e)
         perete.Draw(e)
-        Me.Text = "BrickBuster - " & vieti & " vieti - " & scor & " puncte"
     End Sub
 
+    ' Functia prin care reimprospatam pozitia mingii, o data la 10ms (de 100x pe secunda)
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Me.Refresh()
     End Sub

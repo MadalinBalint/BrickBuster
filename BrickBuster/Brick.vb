@@ -3,13 +3,15 @@
     Public w, h As Integer
     Public type As Integer
     Public color As Pen
-
-    Public Sub New(xx As Integer, yy As Integer, ww As Integer, hh As Integer, p As Pen)
+    Public position As Integer
+    Public Sub New(xx As Integer, yy As Integer, ww As Integer, hh As Integer, p As Pen, pos As Integer)
         w = ww
         h = hh
         x = xx
         y = yy
         color = p
+        position = pos
+        'Console.WriteLine("Punem caramida cu pozitia {0}", position)
     End Sub
 
     Public Sub SetType(t As Integer)

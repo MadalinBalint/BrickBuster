@@ -47,6 +47,7 @@
     Public matrixPozitie(,) As Brick  ' pozitia fiecarei caramizi pe ecran
     Public matrixType(,) As Integer  ' tipul fiecarei caramizi
     Public matrixHP(,) As Integer  ' de cate ori trebuie lovita fiecare caramida ca sa fie distrusa
+    Public matrixMiddle(,) As PointF  ' mijlocul fiecarei caramizi, utilizat in detectia coliziunii
 
     ' Dimensiunea unei caramizi
     Public brickw, brickh As Integer
@@ -54,11 +55,13 @@
     Public spaceh, spacev As Integer
 
     Public Sub New(x As Integer, y As Integer, bw As Integer, bh As Integer, sh As Integer, sv As Integer)
+        Dim xx, yy As Integer
         col = x
         row = y
         ReDim matrixPozitie(col, row)
         ReDim matrixType(col, row)
         ReDim matrixHP(col, row)
+        ReDim matrixMiddle(col, row)
 
         brickw = bw
         brickh = bh
@@ -67,9 +70,12 @@
 
         For j As Integer = 0 To row - 1
             For i As Integer = 0 To col - 1
+                xx = spaceh * (i + 1) + brickw * i
+                yy = spacev * (j + 1) + brickh * j
                 matrixType(i, j) = TipuriCaramizi.NORMAL
                 matrixHP(i, j) = HP(matrixType(i, j))
-                matrixPozitie(i, j) = New Brick(spaceh * (i + 1) + brickw * i, spacev * (j + 1) + brickh * j, brickw, brickh, Colors(matrixType(i, j)))
+                matrixPozitie(i, j) = New Brick(xx, yy, brickw, brickh, Colors(matrixType(i, j)), j * col + i)
+                matrixMiddle(i, j) = New PointF(xx + brickw / 2, yy + brickh / 2)
             Next
         Next
 
@@ -109,5 +115,52 @@
                 matrixPozitie(i, j).Draw(e)
             Next
         Next
+    End Sub
+
+    Public Function Intersection(minge As Ball, caramida As Brick, rectangleCenter As PointF) As Boolean
+        Dim w As Single = caramida.w / 2
+        Dim h As Single = caramida.h / 2
+
+        Dim dx As Single = Math.Abs(minge.mx - rectangleCenter.X)
+        Dim dy As Single = Math.Abs(minge.my - rectangleCenter.Y)
+        Dim radius As Single = minge.r
+
+        If (dx > (radius + w)) Or (dy > (radius + h)) Then Return False
+        Dim circleDistance As PointF = New PointF(Math.Abs(minge.mx - caramida.x - w), Math.Abs(minge.my - caramida.y - h))
+
+        If circleDistance.X <= w Then Return True
+        If circleDistance.Y <= h Then Return True
+
+        Dim cornerDistanceSq As Single = Math.Pow(circleDistance.X - w, 2) + Math.Pow(circleDistance.Y - h, 2)
+
+        Return (cornerDistanceSq <= (Math.Pow(radius, 2)))
+    End Function
+
+    ' Determina cu ce caramida se intersecteaza mingea in pozitia ei actuala
+    ' Returneaza caramida cu care se intersecteaza, altfel NULL
+    Public Function Collision(minge As Ball) As Brick
+        Dim caramida As Brick
+        Dim mijloc As PointF
+
+        For j As Integer = 0 To row - 1
+            For i As Integer = 0 To col - 1
+                ' Daca mai exista caramida (HP > 0) atunci o luam in considerare
+                If matrixHP(i, j) > 0 Then
+                    caramida = matrixPozitie(i, j)
+                    mijloc = matrixMiddle(i, j)
+
+                    ' Daca ne intersectam cu o caramida o returnam
+                    If Intersection(minge, caramida, mijloc) = True Then Return caramida
+                End If
+            Next
+        Next
+
+        Return Nothing
+    End Function
+
+    Public Sub SetBrickColor(position As Integer, color As Pen)
+        Dim j = position \ col
+        Dim i = position Mod col
+        matrixPozitie(i, j).SetColor(color)
     End Sub
 End Class
