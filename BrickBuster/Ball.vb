@@ -25,8 +25,8 @@
     Public Sub SetPosition(xx As Integer, yy As Integer)
         x = xx
         y = yy
-        mx = x + radius / 2
-        my = y + radius / 2
+        mx = x + r
+        my = y + r
     End Sub
 
     ' Misca bila conform unghiului si vitezei
@@ -45,6 +45,14 @@
             If x >= paleta.x And x <= paleta.x + paleta.w Then
                 y = 2 * (paleta.y - radius) - y
                 angle = Math.PI - angle
+                ' Variem putin unghiul si in functie de pozitia mingii fata de centrul paletei cu 10 grade
+                If x >= paleta.x And x <= paleta.x + paleta.w \ 2 - 15 Then
+                    angle = angle - Math.PI / 18.0
+                End If
+
+                If x >= paleta.x + paleta.w \ 2 + 15 And x <= paleta.x + paleta.w Then
+                    angle = angle + Math.PI / 18.0
+                End If
             End If
         End If
 

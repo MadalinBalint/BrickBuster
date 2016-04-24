@@ -49,7 +49,7 @@
             minge.isMoving = True
 
             ' Lasam in stanga si dreapta o margine de 40 pixeli unde unghiul mingii va fi acelasi
-            ' Vom avea un FOV de 90 grade
+            ' Vom avea un FOV de 120 grade
             minge.angle = paleta.GetAngle(40, Math.PI / 1.5)
 
             Return True
@@ -100,7 +100,7 @@
             minge.isMoving = False
 
             ' Lasam in stanga si dreapta o margine de 40 pixeli unde unghiul mingii va fi acelasi
-            ' Vom avea un FOV de 90 grade
+            ' Vom avea un FOV de 120 grade
             minge.angle = paleta.GetAngle(40, Math.PI / 1.5)
 
             ' Pozitionam mingea fix centrata pe mijlocul unde se regaseste in acel moment paleta
@@ -109,8 +109,8 @@
 
         ' Daca am pus pauza nu mai miscam mingea
         If minge.isMoving = True And isGamePaused = False Then
-            minge.Move()
             minge.Bounce(paleta)
+            minge.Move()
         End If
 
         paleta.Draw(e)
