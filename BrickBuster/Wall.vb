@@ -1,4 +1,6 @@
 ﻿Public Class Wall
+    Public scor As Integer = 0 ' scorul acumulat
+
     ' Variatia tipurilor de caramizi
     ' 50% = caramizi normale
     ' 50% = restul de caramizi, din care:
@@ -112,7 +114,7 @@
     Public Sub Draw(e As PaintEventArgs)
         For j As Integer = 0 To row - 1
             For i As Integer = 0 To col - 1
-                matrixPozitie(i, j).Draw(e)
+                If matrixHP(i, j) > 0 Then matrixPozitie(i, j).Draw(e)
             Next
         Next
     End Sub
@@ -163,5 +165,19 @@
         Dim j = position \ col
         Dim i = position Mod col
         matrixPozitie(i, j).SetColor(color)
+    End Sub
+
+    Public Sub HitBrick(position As Integer, hp As Integer)
+        Dim j = position \ col
+        Dim i = position Mod col
+
+        If matrixHP(i, j) > 0 Then
+            matrixHP(i, j) -= hp
+
+            ' Pt fiecare HP distrus dam punctajul specific
+            scor += Points(matrixType(i, j))
+
+            If matrixHP(i, j) < 0 Then matrixHP(i, j) = 0
+        End If
     End Sub
 End Class

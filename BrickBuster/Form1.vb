@@ -4,8 +4,7 @@
     Public perete As Wall ' peretele nostru format din mai multe caramizi
     Public caramizi As List(Of Brick) ' caramida de care se loveste mingea
     Public vieti As Integer ' cate vieti au mai ramas jucatorului
-    Public scor As Integer ' scorul acumulat
-    Public paddleMovement As Integer = 25  ' cu cat se poate misca paleta stanga sau dreapta
+    Public paddleMovement As Integer = 35  ' cu cat se poate misca paleta stanga sau dreapta
     Public isGamePaused As Boolean = False ' daca jocul a fost pus pe pauza
 
     ' Functie pentru miscarea paletei
@@ -67,27 +66,35 @@
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         paleta = New Paddle(90, 15, Me.ClientSize.Width, Me.ClientSize.Height, Pens.LemonChiffon)
         minge = New Ball(20, Me.ClientSize.Width, Me.ClientSize.Height, Pens.Red)
-        perete = New Wall(12, 8, 43, 20, 5, 5)
+        perete = New Wall(12, 8, 43, 25, 5, 5)
         vieti = 10
 
         'minge.SetPosition((Me.ClientSize.Width - minge.radius) \ 2, paleta.y - minge.radius)
         minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius - 2)
-        Me.Text = "BrickBuster - " & vieti & " vieti - " & scor & " puncte"
+        Me.Text = "BrickBuster - " & vieti & " vieti - " & perete.scor & " puncte"
+
     End Sub
 
     Private Sub Form1_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
         caramizi = perete.Collision(minge)
 
         ' Daca ne-am lovit de una sau mai multe caramizi
-        For Each caramida In caramizi
-            Console.WriteLine("Am detectat caramida {0}", caramida.position)
-            perete.SetBrickColor(caramida.position, Pens.YellowGreen)
-        Next
+        'For Each caramida In caramizi
+        'Console.WriteLine("Am detectat caramida {0}", caramida.position)
+        'perete.SetBrickColor(caramida.position, Pens.YellowGreen)
+        'Next
+
+        ' Daca am pus pauza nu mai miscam mingea
+        If minge.isMoving = True And isGamePaused = False Then
+            ' Tinem cont de pozitia paletei si de caramizile existente
+            minge.Bounce(paleta, caramizi, perete)
+            minge.Move()
+        End If
 
         ' Daca cumva atingem partea de jos a ecranului, pierdem o viata
         If minge.stopped = True Then
             vieti -= 1
-            Me.Text = "BrickBuster - " & vieti & " vieti - " & scor & " puncte"
+            Me.Text = "BrickBuster - " & vieti & " vieti - " & perete.scor & " puncte"
 
             ' Am terminat toate vietile, afisam mesaj si terminam programul
             If vieti <= 0 Then
@@ -107,11 +114,7 @@
             minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius - 2)
         End If
 
-        ' Daca am pus pauza nu mai miscam mingea
-        If minge.isMoving = True And isGamePaused = False Then
-            minge.Bounce(paleta)
-            minge.Move()
-        End If
+        Me.Text = "BrickBuster - " & vieti & " vieti - " & perete.scor & " puncte"
 
         paleta.Draw(e)
         minge.Draw(e)
