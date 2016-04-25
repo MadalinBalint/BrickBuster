@@ -1,5 +1,7 @@
 ﻿Public Class Wall
     Public scor As Integer = 0 ' scorul acumulat
+    Public vieti As Integer ' cate vieti au mai ramas jucatorului
+    Public PowerUp As TipuriCaramizi = TipuriCaramizi.EMPTY
 
     ' Variatia tipurilor de caramizi
     ' 50% = caramizi normale
@@ -176,6 +178,8 @@
 
             ' Pt fiecare HP distrus dam punctajul specific
             scor += Points(matrixType(i, j))
+
+            If matrixType(i, j) = TipuriCaramizi.LIFE Then vieti += 1
 
             If matrixHP(i, j) < 0 Then matrixHP(i, j) = 0
         End If

@@ -9,6 +9,7 @@
         COLT_DREAPTA_SUS
         COLT_STANGA_JOS
         COLT_DREAPTA_JOS
+        INTERIOR
     End Enum
 
     Public x, y As Integer ' Pozitia bilei din coltul stanga sus
@@ -50,20 +51,26 @@
         my = y + r
     End Sub
 
-    ' Pozitia mingii fata de o caramida pe verticala
-    Public Function RelativeVertPos(caramida As Brick) As PozitieMinge
-        If caramida.y <= y Then Return PozitieMinge.JOS
-        If caramida.y + caramida.h >= y Then Return PozitieMinge.SUS
-        Console.WriteLine("y=" & caramida.y & ", h=" & caramida.h)
-        Console.WriteLine("minge y=" & y)
-    End Function
+    ' Pozitia mingii fata de o caramida
+    ' Lasam cate +/- 5 grade de libertate fata de jumatatile de diagonala, pentru cazul in care lovim coltul caramizii
+    Public Function RelativePosition(caramida As Brick) As PozitieMinge
+        'Console.WriteLine("y=" & caramida.y & ", h=" & caramida.h)
+        'Console.WriteLine("minge y=" & y)
+        Dim dx = mx - caramida.mx
+        Dim dy = -(my - caramida.my)
+        Dim angle = (Math.Atan2(dy, dx)) * (180.0 / Math.PI)
+        If angle < 0.0 Then angle = -angle
+        Console.WriteLine("Unghi = " & angle)
 
-    ' Pozitia mingii fata de o caramida pe orizontala
-    Public Function RelativeHorizPos(caramida As Brick) As PozitieMinge
-        If caramida.x <= x Then Return PozitieMinge.DREAPTA
-        If caramida.x + caramida.w >= x Then Return PozitieMinge.STANGA
-        Console.WriteLine("x=" & caramida.x & ", w=" & caramida.w)
-        Console.WriteLine("minge x=" & x)
+        If angle >= caramida.angle + 5 And angle <= 180 - caramida.angle - 5 Then Return PozitieMinge.SUS
+        If angle >= 180 - caramida.angle + 5 And angle <= 180 + caramida.angle - 5 Then Return PozitieMinge.STANGA
+        If angle >= 180 + caramida.angle + 5 And angle <= 360 - caramida.angle - 5 Then Return PozitieMinge.JOS
+        If angle >= 360 - caramida.angle + 5 Or angle <= caramida.angle - 5 Then Return PozitieMinge.DREAPTA
+
+        ' In caz ca lovim colturile
+        'If angle >= caramida.angle + 5 And angle <= 180 - caramida.angle - 5 Then Return PozitieMinge.SUS
+
+        Return PozitieMinge.INTERIOR
     End Function
 
     ' Reflecta bila atunci cand intalneste un obstacol
@@ -71,36 +78,30 @@
         ' Reflexie caramizi
         Dim c = caramizi.Count
         Dim b As Brick
-        Dim vpos, hpos As PozitieMinge
+        Dim pos As PozitieMinge
 
         If c > 0 Then
             c = 1
             For i As Integer = 0 To c - 1
                 b = caramizi(i)
-                vpos = RelativeVertPos(b)
-                hpos = RelativeHorizPos(b)
+                pos = RelativePosition(b)
 
-                If y <= b.y + b.h And vpos = PozitieMinge.JOS Then
-                    y = b.y + b.h
+                If pos = PozitieMinge.JOS Then
                     angle = Math.PI - angle
-                    Console.WriteLine("Metoda 4")
-                ElseIf y >= b.y - radius And vpos = PozitieMinge.SUS Then
-                    y = 2 * (b.y - radius) - y
+                    Console.WriteLine("Metoda 4 " & pos.ToString)
+                ElseIf pos = PozitieMinge.SUS Then
                     angle = Math.PI - angle
-                    Console.WriteLine("Metoda 3")
-                ElseIf x >= b.x - radius And hpos = PozitieMinge.DREAPTA Then
-                    x = 2 * (b.x - radius) - x
+                    Console.WriteLine("Metoda 3 " & pos.ToString)
+                ElseIf pos = PozitieMinge.DREAPTA Then
                     angle = -angle
-                    Console.WriteLine("Metoda 1")
-                ElseIf x <= b.x + b.w And hpos = PozitieMinge.STANGA Then
-                    x = b.x + b.w
+                    Console.WriteLine("Metoda 1 " & pos.ToString)
+                ElseIf pos = PozitieMinge.STANGA Then
                     angle = -angle
-                    Console.WriteLine("Metoda 2")
+                    Console.WriteLine("Metoda 2 " & pos.ToString)
                 End If
 
                 perete.HitBrick(b.position, 1)
-                Threading.Thread.Sleep(50)
-
+                'Threading.Thread.Sleep(50)
             Next
         End If
 
@@ -111,11 +112,11 @@
                 angle = Math.PI - angle
 
                 ' Variem putin unghiul si in functie de pozitia mingii fata de centrul paletei cu 10 grade
-                If x >= paleta.x And x <= paleta.x + paleta.w \ 2 - 15 Then
+                If x >= paleta.x And x <= paleta.x + paleta.w \ 2 - 10 Then
                     angle = angle - Math.PI / 18.0
                 End If
 
-                If x >= paleta.x + paleta.w \ 2 + 15 And x <= paleta.x + paleta.w Then
+                If x >= paleta.x + paleta.w \ 2 + 10 And x <= paleta.x + paleta.w Then
                     angle = angle + Math.PI / 18.0
                 End If
             End If

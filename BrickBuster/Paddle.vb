@@ -5,6 +5,7 @@
     Public formh, formw As Integer
     Public spacev As Integer = 5 ' Spatiul pe verticala
     Public isMoving As Boolean = True
+    Public caramida As Brick
 
     Public Sub New(ww As Integer, hh As Integer, fw As Integer, fh As Integer, p As Pen)
         w = ww
@@ -16,6 +17,9 @@
         ' Centram paleta noastra si o punem cu 5 pixeli mai sus decat marginea de jos a ferestrei 
         x = (formw - w) / 2.0
         y = formh - h - spacev
+
+        ' 'Caramida' corespunzatoare paletei noastre pe care o folosim la detectia coliziunii cu mingea
+        caramida = New Brick(x, y, w, h, p, 0)
     End Sub
 
     Public Sub Draw(e As PaintEventArgs)

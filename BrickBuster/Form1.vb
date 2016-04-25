@@ -3,9 +3,12 @@
     Public minge As Ball ' mingea propriu-zisa
     Public perete As Wall ' peretele nostru format din mai multe caramizi
     Public caramizi As List(Of Brick) ' caramida de care se loveste mingea
-    Public vieti As Integer ' cate vieti au mai ramas jucatorului
     Public paddleMovement As Integer = 35  ' cu cat se poate misca paleta stanga sau dreapta
     Public isGamePaused As Boolean = False ' daca jocul a fost pus pe pauza
+
+    Public Function titlu() As String
+        Return "BrickBuster - " & perete.vieti & " vieti - " & perete.scor & " puncte"
+    End Function
 
     ' Functie pentru miscarea paletei
     Protected Overrides Function ProcessCmdKey(ByRef msg As Message, ByVal keyData As Keys) As Boolean
@@ -57,6 +60,7 @@
         ' Tasta P = pauza
         If keyData = Keys.P Then
             isGamePaused = Not isGamePaused
+            If isGamePaused = True Then Me.Text = titlu() + " - PAUZA" Else Me.Text = titlu()
             Return True
         End If
 
@@ -67,12 +71,11 @@
         paleta = New Paddle(90, 15, Me.ClientSize.Width, Me.ClientSize.Height, Pens.LemonChiffon)
         minge = New Ball(20, Me.ClientSize.Width, Me.ClientSize.Height, Pens.Red)
         perete = New Wall(12, 8, 43, 25, 5, 5)
-        vieti = 10
+        perete.vieti = 10
 
         'minge.SetPosition((Me.ClientSize.Width - minge.radius) \ 2, paleta.y - minge.radius)
         minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius - 2)
-        Me.Text = "BrickBuster - " & vieti & " vieti - " & perete.scor & " puncte"
-
+        Me.Text = titlu()
     End Sub
 
     Private Sub Form1_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
@@ -93,11 +96,11 @@
 
         ' Daca cumva atingem partea de jos a ecranului, pierdem o viata
         If minge.stopped = True Then
-            vieti -= 1
-            Me.Text = "BrickBuster - " & vieti & " vieti - " & perete.scor & " puncte"
+            perete.vieti -= 1
+            Me.Text = titlu()
 
             ' Am terminat toate vietile, afisam mesaj si terminam programul
-            If vieti <= 0 Then
+            If perete.vieti <= 0 Then
                 Timer1.Stop()
                 MsgBox("Draga jucator, ati pierdut toate vietile avute la dispozitie." & vbNewLine & "Mai mult noroc data viitoare", 0, "Final de joc")
                 Me.Close()
@@ -114,7 +117,7 @@
             minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius - 2)
         End If
 
-        Me.Text = "BrickBuster - " & vieti & " vieti - " & perete.scor & " puncte"
+        Me.Text = titlu()
 
         paleta.Draw(e)
         minge.Draw(e)
