@@ -58,7 +58,7 @@
         'Console.WriteLine("minge y=" & y)
         Dim dx = mx - caramida.mx
         Dim dy = -(my - caramida.my)
-        Dim angle = (Math.Atan2(dy, dx)) * (180.0 / Math.PI)
+        Dim angle = Math.Atan2(dy, dx) * (180.0 / Math.PI)
         If angle < 0.0 Then angle = -angle
         Console.WriteLine("Unghi = " & angle)
 
@@ -68,8 +68,10 @@
         If angle >= 360 - caramida.angle + 5 Or angle <= caramida.angle - 5 Then Return PozitieMinge.DREAPTA
 
         ' In caz ca lovim colturile
-        'If angle >= caramida.angle + 5 And angle <= 180 - caramida.angle - 5 Then Return PozitieMinge.SUS
-
+        If angle > caramida.angle - 5 And angle < caramida.angle + 5 Then Return PozitieMinge.COLT_DREAPTA_SUS
+        If angle > 180 - caramida.angle - 5 And angle < 180 - caramida.angle + 5 Then Return PozitieMinge.COLT_STANGA_SUS
+        If angle > 180 + caramida.angle - 5 And angle < 180 + caramida.angle + 5 Then Return PozitieMinge.COLT_STANGA_JOS
+        If angle > 360 - caramida.angle - 5 And angle < 360 - caramida.angle + 5 Then Return PozitieMinge.COLT_DREAPTA_JOS
         Return PozitieMinge.INTERIOR
     End Function
 
@@ -98,7 +100,11 @@
                 ElseIf pos = PozitieMinge.STANGA Then
                     angle = -angle
                     Console.WriteLine("Metoda 2 " & pos.ToString)
+                Else
+                    'angle = Math
+                    Console.WriteLine("Fara metoda = " & pos.ToString)
                 End If
+
 
                 perete.HitBrick(b.position, 1)
                 'Threading.Thread.Sleep(50)
