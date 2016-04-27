@@ -21,7 +21,7 @@
             If minge.isMoving = False Then
                 ' Miscam mingea odata cu paleta, doar daca si paleta se misca
                 If paleta.isMoving = True Then
-                    minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius - 2)
+                    minge.SetPosition(paleta.x + paleta.w * paleta.multiplier \ 2 - minge.radius * minge.multiplier \ 2, paleta.y - minge.radius * minge.multiplier - 2)
                 End If
             End If
             Return True
@@ -36,7 +36,7 @@
             If minge.isMoving = False Then
                 ' Miscam mingea odata cu paleta, doar daca si paleta se misca
                 If paleta.isMoving = True Then
-                    minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius - 2)
+                    minge.SetPosition(paleta.x + paleta.w * paleta.multiplier \ 2 - minge.radius * minge.multiplier \ 2, paleta.y - minge.radius * minge.multiplier - 2)
                 End If
             End If
             Return True
@@ -60,7 +60,6 @@
         ' Tasta P = pauza
         If keyData = Keys.P Then
             isGamePaused = Not isGamePaused
-            If isGamePaused = True Then Me.Text = titlu() + " - PAUZA" Else Me.Text = titlu()
             Return True
         End If
 
@@ -68,24 +67,17 @@
     End Function
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        paleta = New Paddle(90, 15, Me.ClientSize.Width, Me.ClientSize.Height, Pens.LemonChiffon)
+        paleta = New Paddle(80, 15, Me.ClientSize.Width, Me.ClientSize.Height, Pens.LemonChiffon)
         minge = New Ball(20, Me.ClientSize.Width, Me.ClientSize.Height, Pens.Red)
         perete = New Wall(12, 8, 43, 25, 5, 5)
         perete.vieti = 10
 
-        'minge.SetPosition((Me.ClientSize.Width - minge.radius) \ 2, paleta.y - minge.radius)
-        minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius - 2)
+        minge.SetPosition(paleta.x + paleta.w * paleta.multiplier \ 2 - minge.radius * minge.multiplier \ 2, paleta.y - minge.radius * minge.multiplier - 2)
         Me.Text = titlu()
     End Sub
 
     Private Sub Form1_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
         caramizi = perete.Collision(minge)
-
-        ' Daca ne-am lovit de una sau mai multe caramizi
-        'For Each caramida In caramizi
-        'Console.WriteLine("Am detectat caramida {0}", caramida.position)
-        'perete.SetBrickColor(caramida.position, Pens.YellowGreen)
-        'Next
 
         ' Daca am pus pauza nu mai miscam mingea
         If minge.isMoving = True And isGamePaused = False Then
@@ -97,7 +89,6 @@
         ' Daca cumva atingem partea de jos a ecranului, pierdem o viata
         If minge.stopped = True Then
             perete.vieti -= 1
-            Me.Text = titlu()
 
             ' Am terminat toate vietile, afisam mesaj si terminam programul
             If perete.vieti <= 0 Then
@@ -114,10 +105,8 @@
             minge.angle = paleta.GetAngle(40, Math.PI / 1.5)
 
             ' Pozitionam mingea fix centrata pe mijlocul unde se regaseste in acel moment paleta
-            minge.SetPosition(paleta.x + paleta.w \ 2 - minge.radius \ 2, paleta.y - minge.radius - 2)
+            minge.SetPosition(paleta.x + paleta.w * paleta.multiplier \ 2 - minge.radius * minge.multiplier \ 2, paleta.y - minge.radius * minge.multiplier - 2)
         End If
-
-        Me.Text = titlu()
 
         paleta.Draw(e)
         minge.Draw(e)
@@ -126,6 +115,7 @@
 
     ' Functia prin care reimprospatam pozitia mingii, o data la 10ms (de 100x pe secunda)
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        If isGamePaused = True Then Me.Text = titlu() + " - PAUZA" Else Me.Text = titlu()
         Me.Refresh()
     End Sub
 End Class

@@ -15,16 +15,18 @@
     '     - 1% - paleta mica
     '     - 1% - paleta mare
 
-    ' Tipuri de caramizi
+    ' Tipuri de caramizi (de la 4 incolo avem POWERUP-uri)
     ' 0 - caramida obisnuita - HP=1
     ' 1 - nu exista (gol)
     ' 2 - caramida cu HP=3
     ' 3 - caramida cu HP=infinit
     ' 4 - viata
-    ' 5 - minge mica 0.5x
-    ' 6 - minge mare 2x
-    ' 7 - paleta mica 0.25x
-    ' 8 - paleta mare 1.5x
+    ' 5 - minge mica 0.75x
+    ' 6 - minge mare 1.50x
+    ' 7 - paleta mica 0.50x
+    ' 8 - paleta mare 2.00x
+    ' 9 - minge inceata 0.50x
+    '10 - minge rapida 1.50x
     Public Enum TipuriCaramizi As Integer
         NORMAL
         EMPTY
@@ -35,6 +37,8 @@
         BIG_BALL
         SMALL_PADDLE
         BIG_PADDLE
+        SLOW_BALL
+        FAST_BALL
     End Enum
 
     Private Function random(ByVal Min As Integer, ByVal Max As Integer) As Integer
@@ -127,7 +131,7 @@
 
         Dim dx As Single = Math.Abs(minge.mx - rectangleCenter.X)
         Dim dy As Single = Math.Abs(minge.my - rectangleCenter.Y)
-        Dim radius As Single = minge.r
+        Dim radius As Single = minge.r * minge.multiplier
 
         If (dx > (radius + w)) Or (dy > (radius + h)) Then Return False
         Dim circleDistance As PointF = New PointF(Math.Abs(minge.mx - caramida.x - w), Math.Abs(minge.my - caramida.y - h))
@@ -180,6 +184,18 @@
             scor += Points(matrixType(i, j))
 
             If matrixType(i, j) = TipuriCaramizi.LIFE Then vieti += 1
+            If matrixType(i, j) >= TipuriCaramizi.SMALL_BALL Then PowerUp = matrixType(i, j)
+
+            Select Case PowerUp
+                Case TipuriCaramizi.SMALL_BALL
+                    Form1.minge.multiplier = 0.75
+                Case TipuriCaramizi.BIG_BALL
+                    Form1.minge.multiplier = 1.5
+                Case TipuriCaramizi.BIG_PADDLE
+                    Form1.paleta.multiplier = 2
+                Case TipuriCaramizi.SMALL_PADDLE
+                    Form1.paleta.multiplier = 0.5
+            End Select
 
             If matrixHP(i, j) < 0 Then matrixHP(i, j) = 0
         End If
