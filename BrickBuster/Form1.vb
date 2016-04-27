@@ -52,8 +52,9 @@
 
             ' Lasam in stanga si dreapta o margine de 40 pixeli unde unghiul mingii va fi acelasi
             ' Vom avea un FOV de 120 grade
-            minge.angle = paleta.GetAngle(40, Math.PI / 1.5)
-
+            'minge.angle = Math.PI / 2.0 'paleta.GetAngle(40, Math.PI / 1.5)
+            minge.angle = Math.PI
+            My.Computer.Audio.Play(My.Resources.Peow, AudioPlayMode.Background)
             Return True
         End If
 
@@ -100,9 +101,11 @@
             minge.stopped = False
             minge.isMoving = False
 
-            ' Lasam in stanga si dreapta o margine de 40 pixeli unde unghiul mingii va fi acelasi
-            ' Vom avea un FOV de 120 grade
-            minge.angle = paleta.GetAngle(40, Math.PI / 1.5)
+            minge.angle = Math.PI
+            minge.multiplier = 1.0
+            perete.PowerUp = Wall.TipuriCaramizi.EMPTY
+            paleta.multiplier = 1.0
+            'minge.angle = paleta.GetAngle(40, Math.PI / 1.5)
 
             ' Pozitionam mingea fix centrata pe mijlocul unde se regaseste in acel moment paleta
             minge.SetPosition(paleta.x + paleta.w * paleta.multiplier \ 2 - minge.radius * minge.multiplier \ 2, paleta.y - minge.radius * minge.multiplier - 2)

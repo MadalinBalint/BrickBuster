@@ -27,6 +27,9 @@
     ' 8 - paleta mare 2.00x
     ' 9 - minge inceata 0.50x
     '10 - minge rapida 1.50x
+    '11 - mingea se lipeste de paleta
+    '12 - distruge toate caramizile pe orizontala
+    '13 - distruge toate caramizile pe verticala
     Public Enum TipuriCaramizi As Integer
         NORMAL
         EMPTY
@@ -129,12 +132,12 @@
         Dim w As Single = caramida.w / 2
         Dim h As Single = caramida.h / 2
 
-        Dim dx As Single = Math.Abs(minge.mx - rectangleCenter.X)
-        Dim dy As Single = Math.Abs(minge.my - rectangleCenter.Y)
+        Dim dx As Single = Math.Abs(minge.mxx - rectangleCenter.X)
+        Dim dy As Single = Math.Abs(minge.myy - rectangleCenter.Y)
         Dim radius As Single = minge.r * minge.multiplier
 
         If (dx > (radius + w)) Or (dy > (radius + h)) Then Return False
-        Dim circleDistance As PointF = New PointF(Math.Abs(minge.mx - caramida.x - w), Math.Abs(minge.my - caramida.y - h))
+        Dim circleDistance As PointF = New PointF(Math.Abs(minge.mxx - caramida.x - w), Math.Abs(minge.myy - caramida.y - h))
 
         If circleDistance.X <= w Then Return True
         If circleDistance.Y <= h Then Return True
@@ -200,4 +203,16 @@
             If matrixHP(i, j) < 0 Then matrixHP(i, j) = 0
         End If
     End Sub
+
+    ' Determinam daca e sfarsitul jocului/nivelului
+    Public Function SfarsitJoc() As Boolean
+        For j As Integer = 0 To row - 1
+            For i As Integer = 0 To col - 1
+                ' Daca mai exista caramida (HP > 0) atunci o luam in considerare
+                If matrixHP(i, j) > 0 And matrixType(i, j) <> TipuriCaramizi.INFINITE Then Return False
+            Next
+        Next
+
+        Return True
+    End Function
 End Class
