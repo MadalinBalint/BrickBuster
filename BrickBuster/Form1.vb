@@ -20,7 +20,7 @@
         minge.isMoving = True
 
         minge.angle = Math.PI
-        minge.SetPosition(paleta.x + paleta.w * paleta.multiplier \ 2 - minge.radius * minge.multiplier \ 2, paleta.y - minge.radius * minge.multiplier - 2)
+        minge.SetPosition(paleta.x + paleta.w * paleta.sizeMultiplier \ 2 - minge.radius * minge.sizeMultiplier \ 2, paleta.y - minge.radius * minge.sizeMultiplier - 2)
         'minge.Move()
         My.Computer.Audio.Play(My.Resources.Peow, AudioPlayMode.Background)
     End Sub
@@ -34,7 +34,7 @@
         If minge.isMoving = False Then
             ' Miscam mingea odata cu paleta, doar daca si paleta se misca
             If paleta.isMoving = True Then
-                minge.SetPosition(paleta.x + paleta.w * paleta.multiplier \ 2 - minge.radius * minge.multiplier \ 2, paleta.y - minge.radius * minge.multiplier - 2)
+                minge.SetPosition(paleta.x + paleta.w * paleta.sizeMultiplier \ 2 - minge.radius * minge.sizeMultiplier \ 2, paleta.y - minge.radius * minge.sizeMultiplier - 2)
             End If
         End If
     End Sub
@@ -74,7 +74,7 @@
         perete = New Wall(12, 2, 43, 25, 5, 5)
         perete.vieti = 3
 
-        minge.SetPosition(paleta.x + paleta.w * paleta.multiplier \ 2 - minge.radius * minge.multiplier \ 2, paleta.y - minge.radius * minge.multiplier - 2)
+        minge.SetPosition(paleta.x + paleta.w * paleta.sizeMultiplier \ 2 - minge.radius * minge.sizeMultiplier \ 2, paleta.y - minge.radius * minge.sizeMultiplier - 2)
         mousex = -1
         Me.Text = titlu()
     End Sub
@@ -90,7 +90,7 @@
         End If
 
         ' Daca cumva atingem partea de jos a ecranului, pierdem o viata
-        If minge.stopped = True Then
+        If minge.isStopped = True Then
             perete.vieti -= 1
 
             ' Am terminat toate vietile, afisam mesaj si terminam programul
@@ -102,20 +102,20 @@
             End If
 
             ' Aducem atributele fiecarei componente la valorile normale
-            minge.stopped = False
+            minge.isStopped = False
             minge.isMoving = False
             minge.angle = Math.PI / 2.0
-            minge.speed_multiplier = 1.0
-            minge.multiplier = 1.0
-            minge.sticky = False
+            minge.speedMultiplier = 1.0
+            minge.sizeMultiplier = 1.0
+            minge.isSticky = False
 
             perete.PowerUp = Wall.TipuriCaramizi.EMPTY
 
-            paleta.multiplier = 1.0
-            paleta.visible = True
+            paleta.sizeMultiplier = 1.0
+            paleta.isVisible = True
 
             ' Pozitionam mingea fix centrata pe mijlocul unde se regaseste in acel moment paleta
-            minge.SetPosition(paleta.x + paleta.w * paleta.multiplier \ 2 - minge.radius * minge.multiplier \ 2, paleta.y - minge.radius * minge.multiplier - 2)
+            minge.SetPosition(paleta.x + paleta.w * paleta.sizeMultiplier \ 2 - minge.radius * minge.sizeMultiplier \ 2, paleta.y - minge.radius * minge.sizeMultiplier - 2)
         End If
 
         paleta.Draw(e)
@@ -151,25 +151,5 @@
             Case MouseButtons.Right
                 isGamePaused = Not isGamePaused
         End Select
-    End Sub
-
-    Private Sub SetariJocToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SetariJocToolStripMenuItem.Click
-
-    End Sub
-
-    Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem1.Click
-
-    End Sub
-
-    Private Sub IesireToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles IesireToolStripMenuItem.Click
-
-    End Sub
-
-    Private Sub TabelaDeOnoareToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TabelaDeOnoareToolStripMenuItem.Click
-
-    End Sub
-
-    Private Sub InformatiAutorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InformatiAutorToolStripMenuItem.Click
-
     End Sub
 End Class

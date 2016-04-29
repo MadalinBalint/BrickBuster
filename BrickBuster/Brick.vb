@@ -2,9 +2,9 @@
 Public Class Brick
     Public x, y As Integer
     Public w, h As Integer
-    Public mx, my As Single
+    Public centerX, centerY As Single
     Public type As Integer
-    Public culoare As Pen
+    Public brickColor As Pen
     Public position As Integer
     Public angle As Single
 
@@ -13,14 +13,14 @@ Public Class Brick
         h = hh
         x = xx
         y = yy
-        culoare = p
+        brickColor = p
         position = pos
-        mx = x + w / 2.0
-        my = y + h / 2.0
+        centerX = x + w / 2.0
+        centerY = y + h / 2.0
 
-        Dim dx = (x + w) - mx
-        Dim dy = -(y - my)
-        angle = (Math.Atan2(dy, dx)) * (180.0 / Math.PI)
+        Dim dx = (x + w) - centerX
+        Dim dy = -(y - centerY)
+        angle = Math.Atan2(dy, dx) * (180.0 / Math.PI)
         If angle < 0.0 Then angle = -angle
         'Console.WriteLine("Unghi caramida = " & angle)
     End Sub
@@ -30,15 +30,15 @@ Public Class Brick
     End Sub
 
     Public Sub SetColor(c As Pen)
-        culoare = c
+        brickColor = c
     End Sub
 
     Public Sub Draw(e As PaintEventArgs)
         ' Daca e o caramida goala nu o desenam
         If type = Wall.TipuriCaramizi.EMPTY Then Return
 
-        Dim brush As New SolidBrush(culoare.Color)
-        Dim linGrBrush As New LinearGradientBrush(New Point(x, y), New Point(x + w, y + h), Color.WhiteSmoke, culoare.Color)
+        Dim brush As New SolidBrush(brickColor.Color)
+        Dim linGrBrush As New LinearGradientBrush(New Point(x, y), New Point(x + w, y + h), Color.WhiteSmoke, brickColor.Color)
         linGrBrush.SetSigmaBellShape(1)
         Dim pen As New Pen(linGrBrush)
 

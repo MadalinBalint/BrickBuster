@@ -15,28 +15,28 @@ Public Class Ball
 
     Public x, y As Integer ' Pozitia bilei din coltul stanga sus
     Public radius As Integer ' Raza bilei
-    Public culoare As Pen ' Culoarea bilei
-    Public mxx, myy, r As Single
+    Public ballColor As Pen ' Culoarea bilei
+    Public centerX, centerY, r As Single
 
     Public speed As Double ' Factorul de viteza al bilei (x1.0)
     Public angle As Double ' Unghiul sub care se misca bila (radiani)
-    Public width, height As Integer ' Dimensiunea ferestrei in interiorul careia se misca bila
+    Public clientWidth, clientHeight As Integer ' Dimensiunea ferestrei in interiorul careia se misca bila
     Public isMoving As Boolean = False ' Atunci cand se afla in miscare
-    Public sticky As Boolean = False ' Pt POWERUP-ul 'Sticky Ball'
-    Public stopped As Boolean = False ' Atunci cand atinge partea de jos a ecranului
-    Public multiplier As Single ' Folosit in cazul POWERUP-urilor
-    Public speed_multiplier As Single ' Folosit in cazul POWERUP-urilor
+    Public isSticky As Boolean = False ' Pt POWERUP-ul 'Sticky Ball'
+    Public isStopped As Boolean = False ' Atunci cand atinge partea de jos a ecranului
+    Public sizeMultiplier As Single ' Folosit in cazul POWERUP-urilor
+    Public speedMultiplier As Single ' Folosit in cazul POWERUP-urilor
 
     ' Constructorul pentru clasa Ball
     Public Sub New(rr As Integer, fw As Integer, fh As Integer, p As Pen)
         radius = rr
-        culoare = p
+        ballColor = p
         angle = Math.PI / 2.0
         speed = 4.0
-        width = fw
-        height = fh
-        multiplier = 1.0
-        speed_multiplier = 1.0
+        clientWidth = fw
+        clientHeight = fh
+        sizeMultiplier = 1.0
+        speedMultiplier = 1.0
         r = rr / 2.0 ' Valoarea adevarata
     End Sub
 
@@ -44,22 +44,22 @@ Public Class Ball
     Public Sub SetPosition(xx As Integer, yy As Integer)
         x = xx
         y = yy
-        mxx = x + r * multiplier
-        myy = y + r * multiplier
+        centerX = x + r * sizeMultiplier
+        centerY = y + r * sizeMultiplier
     End Sub
 
     ' Misca bila conform unghiului si vitezei
     Public Sub Move()
-        x += Math.Sin(angle) * speed * speed_multiplier
-        y += Math.Cos(angle) * speed * speed_multiplier
+        x += Math.Sin(angle) * speed * speedMultiplier
+        y += Math.Cos(angle) * speed * speedMultiplier
 
-        mxx = x + r * multiplier
-        myy = y + r * multiplier
+        centerX = x + r * sizeMultiplier
+        centerY = y + r * sizeMultiplier
     End Sub
 
     Public Function BrickBallAngle(caramida As Brick) As Single
-        Dim dx = mxx - caramida.mx
-        Dim dy = -(myy - caramida.my)
+        Dim dx = centerX - caramida.centerX
+        Dim dy = -(centerY - caramida.centerY)
         Dim angle = Math.Atan2(dy, dx) * (180.0 / Math.PI)
         If angle < 0.0 Then angle = -angle
 
@@ -131,14 +131,14 @@ Public Class Ball
 
         ' Reflexie paleta
         'If perete.Intersection(Me, paleta.caramida, New PointF(paleta.caramida.mx, paleta.caramida.my)) And paleta.visible Then
-        If y >= paleta.y - radius * multiplier And paleta.visible Then
-            If x >= paleta.x And x <= paleta.x + paleta.w * paleta.multiplier Then
-                If sticky = True Then
+        If y >= paleta.y - radius * sizeMultiplier And paleta.isVisible Then
+            If x >= paleta.x And x <= paleta.x + paleta.w * paleta.sizeMultiplier Then
+                If isSticky = True Then
                     isMoving = False
                     Return
                 End If
 
-                y = 2 * (paleta.y - radius * multiplier) - y
+                y = 2 * (paleta.y - radius * sizeMultiplier) - y
                 a = BrickBallAngle(paleta.caramida)
                 angle = Math.PI - angle + (Math.PI / 2.0 - a * Math.PI / 180.0) / 4.0
 
@@ -149,8 +149,8 @@ Public Class Ball
         End If
 
         ' Reflexie perete
-        If x >= width - radius * multiplier Then
-            x = 2 * (width - radius * multiplier) - x
+        If x >= clientWidth - radius * sizeMultiplier Then
+            x = 2 * (clientWidth - radius * sizeMultiplier) - x
             angle = -angle
             Console.WriteLine("Reflexie perete: Metoda 4a")
             My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
@@ -159,12 +159,12 @@ Public Class Ball
             angle = -angle
             Console.WriteLine("Reflexie perete: Metoda 3a")
             My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
-        ElseIf y >= height - radius * multiplier Then
-            y = 2 * (height - radius * multiplier) - y
+        ElseIf y >= clientHeight - radius * sizeMultiplier Then
+            y = 2 * (clientHeight - radius * sizeMultiplier) - y
             angle = Math.PI - angle
             Console.WriteLine("Reflexie perete: Metoda 2a")
             My.Computer.Audio.Play(My.Resources.Fanfare, AudioPlayMode.Background)
-            stopped = True
+            isStopped = True
             Return
         ElseIf y <= 0 Then
             y = 0
@@ -182,9 +182,9 @@ Public Class Ball
 
     ' Deseneaza bila pe ecran
     Sub Draw(e As PaintEventArgs)
-        Dim brush As New SolidBrush(culoare.Color)
+        Dim brush As New SolidBrush(ballColor.Color)
 
-        e.Graphics.FillEllipse(brush, x, y, radius * multiplier, radius * multiplier)
-        e.Graphics.DrawEllipse(Pens.DarkSlateGray, x, y, radius * multiplier, radius * multiplier)
+        e.Graphics.FillEllipse(brush, x, y, radius * sizeMultiplier, radius * sizeMultiplier)
+        e.Graphics.DrawEllipse(Pens.DarkSlateGray, x, y, radius * sizeMultiplier, radius * sizeMultiplier)
     End Sub
 End Class

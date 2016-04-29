@@ -26,13 +26,13 @@ Partial Class Form1
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.SetariToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.InformatiiToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TabelaDeOnoareToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.InformatiAutorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SetariJocToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.miNewGame = New System.Windows.Forms.ToolStripMenuItem()
+        Me.miResetGame = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.IesireToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.InformatiiToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -53,35 +53,24 @@ Partial Class Form1
         '
         'SetariToolStripMenuItem
         '
-        Me.SetariToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SetariJocToolStripMenuItem, Me.ToolStripMenuItem1, Me.ToolStripSeparator1, Me.IesireToolStripMenuItem})
+        Me.SetariToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.miNewGame, Me.miResetGame, Me.ToolStripMenuItem2, Me.ToolStripMenuItem3, Me.ToolStripSeparator1, Me.IesireToolStripMenuItem})
         Me.SetariToolStripMenuItem.Name = "SetariToolStripMenuItem"
-        Me.SetariToolStripMenuItem.Size = New System.Drawing.Size(59, 24)
-        Me.SetariToolStripMenuItem.Text = "Setari"
+        Me.SetariToolStripMenuItem.Size = New System.Drawing.Size(60, 24)
+        Me.SetariToolStripMenuItem.Text = "Game"
         '
-        'InformatiiToolStripMenuItem
+        'miNewGame
         '
-        Me.InformatiiToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TabelaDeOnoareToolStripMenuItem, Me.InformatiAutorToolStripMenuItem})
-        Me.InformatiiToolStripMenuItem.Name = "InformatiiToolStripMenuItem"
-        Me.InformatiiToolStripMenuItem.Size = New System.Drawing.Size(86, 24)
-        Me.InformatiiToolStripMenuItem.Text = "Informatii"
+        Me.miNewGame.Name = "miNewGame"
+        Me.miNewGame.Size = New System.Drawing.Size(181, 26)
+        Me.miNewGame.Text = "New game"
         '
-        'TabelaDeOnoareToolStripMenuItem
+        'miResetGame
         '
-        Me.TabelaDeOnoareToolStripMenuItem.Name = "TabelaDeOnoareToolStripMenuItem"
-        Me.TabelaDeOnoareToolStripMenuItem.Size = New System.Drawing.Size(199, 26)
-        Me.TabelaDeOnoareToolStripMenuItem.Text = "Tabela de onoare"
-        '
-        'InformatiAutorToolStripMenuItem
-        '
-        Me.InformatiAutorToolStripMenuItem.Name = "InformatiAutorToolStripMenuItem"
-        Me.InformatiAutorToolStripMenuItem.Size = New System.Drawing.Size(199, 26)
-        Me.InformatiAutorToolStripMenuItem.Text = "Date autor"
-        '
-        'SetariJocToolStripMenuItem
-        '
-        Me.SetariJocToolStripMenuItem.Name = "SetariJocToolStripMenuItem"
-        Me.SetariJocToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
-        Me.SetariJocToolStripMenuItem.Text = "Setari joc"
+        Me.miResetGame.Enabled = False
+        Me.miResetGame.Name = "miResetGame"
+        Me.miResetGame.ShowShortcutKeys = False
+        Me.miResetGame.Size = New System.Drawing.Size(181, 26)
+        Me.miResetGame.Text = "Reset game"
         '
         'ToolStripSeparator1
         '
@@ -92,13 +81,25 @@ Partial Class Form1
         '
         Me.IesireToolStripMenuItem.Name = "IesireToolStripMenuItem"
         Me.IesireToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
-        Me.IesireToolStripMenuItem.Text = "Iesire"
+        Me.IesireToolStripMenuItem.Text = "Exit"
         '
-        'ToolStripMenuItem1
+        'InformatiiToolStripMenuItem
         '
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(181, 26)
-        Me.ToolStripMenuItem1.Text = "Reseteaza joc"
+        Me.InformatiiToolStripMenuItem.Name = "InformatiiToolStripMenuItem"
+        Me.InformatiiToolStripMenuItem.Size = New System.Drawing.Size(62, 24)
+        Me.InformatiiToolStripMenuItem.Text = "About"
+        '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(181, 26)
+        Me.ToolStripMenuItem2.Text = "Scoreboard"
+        '
+        'ToolStripMenuItem3
+        '
+        Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(181, 26)
+        Me.ToolStripMenuItem3.Text = "Options"
         '
         'Form1
         '
@@ -126,10 +127,10 @@ Partial Class Form1
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents SetariToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents InformatiiToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents TabelaDeOnoareToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents InformatiAutorToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents SetariJocToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents miNewGame As ToolStripMenuItem
+    Friend WithEvents miResetGame As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents IesireToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem3 As ToolStripMenuItem
 End Class

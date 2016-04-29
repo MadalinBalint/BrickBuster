@@ -61,38 +61,38 @@
     Public Percentage() As Integer = {50, 2, 5, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1}
 
     Public col, row As Integer
-    Public matrixPozitie(,) As Brick  ' pozitia fiecarei caramizi pe ecran
-    Public matrixType(,) As Integer  ' tipul fiecarei caramizi
-    Public matrixHP(,) As Integer  ' de cate ori trebuie lovita fiecare caramida ca sa fie distrusa
-    Public matrixMiddle(,) As PointF  ' mijlocul fiecarei caramizi, utilizat in detectia coliziunii
+    Public matrixScreenPosition(,) As Brick  ' pozitia fiecarei caramizi pe ecran
+    Public matrixBrickType(,) As Integer  ' tipul fiecarei caramizi
+    Public matrixHitPoints(,) As Integer  ' de cate ori trebuie lovita fiecare caramida ca sa fie distrusa
+    Public matrixCenter(,) As PointF  ' mijlocul fiecarei caramizi, utilizat in detectia coliziunii
 
     ' Dimensiunea unei caramizi
-    Public brickw, brickh As Integer
+    Public brickWidth, brickHeight As Integer
     ' Spatiile pe orizontala si pe verticala intre caramizi
-    Public spaceh, spacev As Integer
+    Public hSpace, vSpace As Integer
 
     Public Sub New(x As Integer, y As Integer, bw As Integer, bh As Integer, sh As Integer, sv As Integer)
         Dim xx, yy As Integer
         col = x
         row = y
-        ReDim matrixPozitie(col, row)
-        ReDim matrixType(col, row)
-        ReDim matrixHP(col, row)
-        ReDim matrixMiddle(col, row)
+        ReDim matrixScreenPosition(col, row)
+        ReDim matrixBrickType(col, row)
+        ReDim matrixHitPoints(col, row)
+        ReDim matrixCenter(col, row)
 
-        brickw = bw
-        brickh = bh
-        spaceh = sh
-        spacev = sv
+        brickWidth = bw
+        brickHeight = bh
+        hSpace = sh
+        vSpace = sv
 
         For j As Integer = 0 To row - 1
             For i As Integer = 0 To col - 1
-                xx = spaceh * (i + 1) + brickw * i
-                yy = spacev * (j + 1) + brickh * j
-                matrixType(i, j) = TipuriCaramizi.NORMAL
-                matrixHP(i, j) = HP(matrixType(i, j))
-                matrixPozitie(i, j) = New Brick(xx, yy, brickw, brickh, Colors(matrixType(i, j)), j * col + i)
-                matrixMiddle(i, j) = New PointF(xx + brickw / 2, yy + brickh / 2)
+                xx = hSpace * (i + 1) + brickWidth * i
+                yy = vSpace * (j + 1) + brickHeight * j
+                matrixBrickType(i, j) = TipuriCaramizi.NORMAL
+                matrixHitPoints(i, j) = HP(matrixBrickType(i, j))
+                matrixScreenPosition(i, j) = New Brick(xx, yy, brickWidth, brickHeight, Colors(matrixBrickType(i, j)), j * col + i)
+                matrixCenter(i, j) = New PointF(xx + brickWidth / 2, yy + brickHeight / 2)
             Next
         Next
 
@@ -111,17 +111,17 @@
                 ecol = rnd Mod col
 
                 ' Evitam sa setam din nou o caramida speciala
-                Do While matrixType(ecol, erow) > TipuriCaramizi.NORMAL
+                Do While matrixBrickType(ecol, erow) > TipuriCaramizi.NORMAL
                     rnd = random(0, total - 1)
                     erow = rnd \ col
                     ecol = rnd Mod col
                 Loop
 
                 ' Setam proprietatile caramizilor speciale
-                matrixType(ecol, erow) = i
-                matrixHP(ecol, erow) = HP(i)
-                matrixPozitie(ecol, erow).SetColor(Colors(i))
-                matrixPozitie(ecol, erow).SetType(i)
+                matrixBrickType(ecol, erow) = i
+                matrixHitPoints(ecol, erow) = HP(i)
+                matrixScreenPosition(ecol, erow).SetColor(Colors(i))
+                matrixScreenPosition(ecol, erow).SetType(i)
             Next
         Next
     End Sub
@@ -129,7 +129,7 @@
     Public Sub Draw(e As PaintEventArgs)
         For j As Integer = 0 To row - 1
             For i As Integer = 0 To col - 1
-                If matrixHP(i, j) > 0 Then matrixPozitie(i, j).Draw(e)
+                If matrixHitPoints(i, j) > 0 Then matrixScreenPosition(i, j).Draw(e)
             Next
         Next
     End Sub
@@ -138,12 +138,12 @@
         Dim w As Single = caramida.w / 2
         Dim h As Single = caramida.h / 2
 
-        Dim dx As Single = Math.Abs(minge.mxx - rectangleCenter.X)
-        Dim dy As Single = Math.Abs(minge.myy - rectangleCenter.Y)
-        Dim radius As Single = minge.r * minge.multiplier
+        Dim dx As Single = Math.Abs(minge.centerX - rectangleCenter.X)
+        Dim dy As Single = Math.Abs(minge.centerY - rectangleCenter.Y)
+        Dim radius As Single = minge.r * minge.sizeMultiplier
 
         If (dx > (radius + w)) Or (dy > (radius + h)) Then Return False
-        Dim circleDistance As PointF = New PointF(Math.Abs(minge.mxx - caramida.x - w), Math.Abs(minge.myy - caramida.y - h))
+        Dim circleDistance As PointF = New PointF(Math.Abs(minge.centerX - caramida.x - w), Math.Abs(minge.centerY - caramida.y - h))
 
         If circleDistance.X <= w Then Return True
         If circleDistance.Y <= h Then Return True
@@ -163,9 +163,9 @@
         For j As Integer = row - 1 To 0 Step -1
             For i As Integer = 0 To col - 1
                 ' Daca mai exista caramida (HP > 0) atunci o luam in considerare
-                If matrixHP(i, j) > 0 Then
-                    caramida = matrixPozitie(i, j)
-                    mijloc = matrixMiddle(i, j)
+                If matrixHitPoints(i, j) > 0 Then
+                    caramida = matrixScreenPosition(i, j)
+                    mijloc = matrixCenter(i, j)
 
                     ' Daca ne intersectam cu o caramida o returnam
                     If Intersection(minge, caramida, mijloc) = True Then lista.Add(caramida)
@@ -179,54 +179,54 @@
     Public Sub SetBrickColor(position As Integer, color As Pen)
         Dim j = position \ col
         Dim i = position Mod col
-        matrixPozitie(i, j).SetColor(color)
+        matrixScreenPosition(i, j).SetColor(color)
     End Sub
 
     Public Sub HitBrick(position As Integer, hp As Integer)
         Dim j = position \ col
         Dim i = position Mod col
 
-        If matrixHP(i, j) > 0 Then
-            matrixHP(i, j) -= hp
+        If matrixHitPoints(i, j) > 0 Then
+            matrixHitPoints(i, j) -= hp
 
             ' Pt fiecare HP distrus dam punctajul specific
-            scor += Points(matrixType(i, j))
+            scor += Points(matrixBrickType(i, j))
 
-            If matrixType(i, j) = TipuriCaramizi.INFINITE Then
+            If matrixBrickType(i, j) = TipuriCaramizi.INFINITE Then
                 My.Computer.Audio.Play(My.Resources.Tank, AudioPlayMode.Background)
-            ElseIf matrixType(i, j) >= TipuriCaramizi.LIFE Then
+            ElseIf matrixBrickType(i, j) >= TipuriCaramizi.LIFE Then
                 My.Computer.Audio.Play(My.Resources.Orchestr, AudioPlayMode.Background)
             Else
                 My.Computer.Audio.Play(My.Resources.Glass, AudioPlayMode.Background)
             End If
 
-            If matrixType(i, j) = TipuriCaramizi.LIFE Then vieti += 1
-            If matrixType(i, j) >= TipuriCaramizi.SMALL_BALL Then PowerUp = matrixType(i, j)
+            If matrixBrickType(i, j) = TipuriCaramizi.LIFE Then vieti += 1
+            If matrixBrickType(i, j) >= TipuriCaramizi.SMALL_BALL Then PowerUp = matrixBrickType(i, j)
 
             Select Case PowerUp
                 Case TipuriCaramizi.SMALL_BALL
-                    Form1.minge.multiplier = 0.75
+                    Form1.minge.sizeMultiplier = 0.75
                 Case TipuriCaramizi.BIG_BALL
-                    Form1.minge.multiplier = 1.5
+                    Form1.minge.sizeMultiplier = 1.5
                 Case TipuriCaramizi.BIG_PADDLE
-                    Form1.paleta.multiplier = 2
+                    Form1.paleta.sizeMultiplier = 2
                 Case TipuriCaramizi.SMALL_PADDLE
-                    Form1.paleta.multiplier = 0.5
+                    Form1.paleta.sizeMultiplier = 0.5
                 Case TipuriCaramizi.FAST_BALL
-                    Form1.minge.speed_multiplier = 1.5
+                    Form1.minge.speedMultiplier = 1.5
                 Case TipuriCaramizi.SLOW_BALL
-                    Form1.minge.speed_multiplier = 0.5
+                    Form1.minge.speedMultiplier = 0.5
                 Case TipuriCaramizi.STICKY_BALL
-                    Form1.minge.sticky = True
+                    Form1.minge.isSticky = True
                 Case TipuriCaramizi.HORIZONTAL_DESTROYER
                 Case TipuriCaramizi.VERTICAL_DESTROYER
                 Case TipuriCaramizi.PADDLE_DESTROYER
-                    Form1.minge.sticky = False
-                    Form1.paleta.visible = False
+                    Form1.minge.isSticky = False
+                    Form1.paleta.isVisible = False
 
             End Select
 
-            If matrixHP(i, j) < 0 Then matrixHP(i, j) = 0
+            If matrixHitPoints(i, j) < 0 Then matrixHitPoints(i, j) = 0
         End If
     End Sub
 
@@ -235,7 +235,7 @@
         For j As Integer = 0 To row - 1
             For i As Integer = 0 To col - 1
                 ' Daca mai exista caramida (HP > 0) atunci o luam in considerare
-                If matrixHP(i, j) > 0 And matrixType(i, j) <> TipuriCaramizi.INFINITE Then Return False
+                If matrixHitPoints(i, j) > 0 And matrixBrickType(i, j) <> TipuriCaramizi.INFINITE Then Return False
             Next
         Next
 
