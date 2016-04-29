@@ -22,18 +22,21 @@ Public Class Ball
     Public angle As Double ' Unghiul sub care se misca bila (radiani)
     Public width, height As Integer ' Dimensiunea ferestrei in interiorul careia se misca bila
     Public isMoving As Boolean = False ' Atunci cand se afla in miscare
+    Public sticky As Boolean = False ' Pt POWERUP-ul 'Sticky Ball'
     Public stopped As Boolean = False ' Atunci cand atinge partea de jos a ecranului
     Public multiplier As Single ' Folosit in cazul POWERUP-urilor
+    Public speed_multiplier As Single ' Folosit in cazul POWERUP-urilor
 
     ' Constructorul pentru clasa Ball
     Public Sub New(rr As Integer, fw As Integer, fh As Integer, p As Pen)
         radius = rr
         culoare = p
-        angle = Math.PI
+        angle = Math.PI / 2.0
         speed = 4.0
         width = fw
         height = fh
         multiplier = 1.0
+        speed_multiplier = 1.0
         r = rr / 2.0 ' Valoarea adevarata
     End Sub
 
@@ -47,8 +50,8 @@ Public Class Ball
 
     ' Misca bila conform unghiului si vitezei
     Public Sub Move()
-        x += Math.Sin(angle) * speed
-        y -= Math.Cos(angle) * speed
+        x += Math.Sin(angle) * speed * speed_multiplier
+        y += Math.Cos(angle) * speed * speed_multiplier
 
         mxx = x + r * multiplier
         myy = y + r * multiplier
@@ -59,7 +62,6 @@ Public Class Ball
         Dim dy = -(myy - caramida.my)
         Dim angle = Math.Atan2(dy, dx) * (180.0 / Math.PI)
         If angle < 0.0 Then angle = -angle
-        Console.WriteLine("Unghi = " & angle)
 
         Return angle
     End Function
@@ -102,65 +104,80 @@ Public Class Ball
                     If pos = PozitieMinge.JOS Then
                         angle = Math.PI - angle
                         reflectat = True
-                        Console.WriteLine("Metoda 4 " & pos.ToString)
+                        Console.WriteLine("Metoda 4 " & pos.ToString & ", unghi=" & a)
                     ElseIf pos = PozitieMinge.SUS Then
                         angle = Math.PI - angle
                         reflectat = True
-                        Console.WriteLine("Metoda 3 " & pos.ToString)
+                        Console.WriteLine("Metoda 3 " & pos.ToString & ", unghi=" & a)
                     ElseIf pos = PozitieMinge.DREAPTA Then
                         angle = -angle
                         reflectat = True
-                        Console.WriteLine("Metoda 1 " & pos.ToString)
+                        Console.WriteLine("Metoda 1 " & pos.ToString & ", unghi=" & a)
                     ElseIf pos = PozitieMinge.STANGA Then
                         angle = -angle
                         reflectat = True
-                        Console.WriteLine("Metoda 2 " & pos.ToString)
+                        Console.WriteLine("Metoda 2 " & pos.ToString & ", unghi=" & a)
                     Else
                         angle = a * 2.0 * Math.PI / 180.0 - angle
-
                         reflectat = True
-                        Console.WriteLine("Fara metoda = " & pos.ToString)
+                        Console.WriteLine("Fara metoda = " & pos.ToString & ", unghi=" & a)
                     End If
                 End If
 
                 perete.HitBrick(b.position, 1)
-                My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
             Next
             Return
         End If
 
         ' Reflexie paleta
-        If perete.Intersection(Me, paleta.caramida, New PointF(paleta.caramida.mx, paleta.caramida.my)) Then
-            y = 2 * (paleta.y - radius * multiplier) - y
-            a = BrickBallAngle(paleta.caramida)
-            'angle = Math.PI - angle
-            angle = -angle + Math.PI + (Math.PI / 2.0 - a * Math.PI / 180.0) / 4.0
+        'If perete.Intersection(Me, paleta.caramida, New PointF(paleta.caramida.mx, paleta.caramida.my)) And paleta.visible Then
+        If y >= paleta.y - radius * multiplier And paleta.visible Then
+            If x >= paleta.x And x <= paleta.x + paleta.w * paleta.multiplier Then
+                If sticky = True Then
+                    isMoving = False
+                    Return
+                End If
 
-            My.Computer.Audio.Play(My.Resources.Ricochet, AudioPlayMode.Background)
-            Return
+                y = 2 * (paleta.y - radius * multiplier) - y
+                a = BrickBallAngle(paleta.caramida)
+                angle = Math.PI - angle + (Math.PI / 2.0 - a * Math.PI / 180.0) / 4.0
+
+                My.Computer.Audio.Play(My.Resources.Ricochet, AudioPlayMode.Background)
+                Console.WriteLine("Reflexie paleta: unghi=" & a)
+                Return
+            End If
         End If
 
         ' Reflexie perete
         If x >= width - radius * multiplier Then
             x = 2 * (width - radius * multiplier) - x
             angle = -angle
-            My.Computer.Audio.Play(My.Resources.Glass, AudioPlayMode.Background)
+            Console.WriteLine("Reflexie perete: Metoda 4a")
+            My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
         ElseIf x <= 0 Then
             x = 0
             angle = -angle
-            My.Computer.Audio.Play(My.Resources.Glass, AudioPlayMode.Background)
+            Console.WriteLine("Reflexie perete: Metoda 3a")
+            My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
         ElseIf y >= height - radius * multiplier Then
             y = 2 * (height - radius * multiplier) - y
             angle = Math.PI - angle
+            Console.WriteLine("Reflexie perete: Metoda 2a")
             My.Computer.Audio.Play(My.Resources.Fanfare, AudioPlayMode.Background)
             stopped = True
             Return
         ElseIf y <= 0 Then
             y = 0
             angle = Math.PI - angle
-            My.Computer.Audio.Play(My.Resources.Glass, AudioPlayMode.Background)
+            Console.WriteLine("Reflexie perete: Metoda 1a")
+            My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
         End If
 
+        If angle = Math.PI Then
+            angle = angle - Math.PI / 18
+        ElseIf angle = 0 Then
+            angle = Math.PI / 18
+        End If
     End Sub
 
     ' Deseneaza bila pe ecran

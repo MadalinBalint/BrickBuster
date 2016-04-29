@@ -7,6 +7,7 @@
     Public isMoving As Boolean = True
     Public caramida As Brick
     Public multiplier As Single ' Folosit in cazul POWERUP-urilor
+    Public visible As Boolean = True ' Pt POWERUP-ul 'Paddle Destroyer'
     Public Sub New(ww As Integer, hh As Integer, fw As Integer, fh As Integer, p As Pen)
         w = ww
         h = hh
@@ -24,6 +25,7 @@
     End Sub
 
     Public Sub Draw(e As PaintEventArgs)
+        If visible = False Then Return
         Dim brush As New SolidBrush(color.Color)
 
         e.Graphics.FillRectangle(brush, x, y, w * multiplier, h)
@@ -56,14 +58,4 @@
 
         caramida = New Brick(x, y, w * multiplier, h, color, 0)
     End Sub
-
-    ' Returneaza unghiul sub care se reflecta mingea atunci cand loveste paleta
-    ' Cand paleta e centrata mingea se reflecta sub 90 grade indiferent de ce limita sau FOV am setat
-    Public Function GetAngle(limit As Integer, fov As Single) As Single
-        Dim minAngle = (Math.PI - fov) / 2
-
-        If x < limit Or x > formw - limit Then Return minAngle
-
-        Return (fov - Math.PI / 2.0) * (1.0 - (x + w * multiplier / 2.0) / (formw / 2.0))
-    End Function
 End Class

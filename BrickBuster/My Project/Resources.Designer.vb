@@ -72,6 +72,15 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         '''</summary>
+        Friend ReadOnly Property EndFx() As System.IO.UnmanagedMemoryStream
+            Get
+                Return ResourceManager.GetStream("EndFx", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        '''</summary>
         Friend ReadOnly Property Fanfare() As System.IO.UnmanagedMemoryStream
             Get
                 Return ResourceManager.GetStream("Fanfare", resourceCulture)
@@ -81,9 +90,27 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         '''</summary>
+        Friend ReadOnly Property FunnyBoy() As System.IO.UnmanagedMemoryStream
+            Get
+                Return ResourceManager.GetStream("FunnyBoy", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        '''</summary>
         Friend ReadOnly Property Glass() As System.IO.UnmanagedMemoryStream
             Get
                 Return ResourceManager.GetStream("Glass", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        '''</summary>
+        Friend ReadOnly Property Orchestr() As System.IO.UnmanagedMemoryStream
+            Get
+                Return ResourceManager.GetStream("Orchestr", resourceCulture)
             End Get
         End Property
         
@@ -102,6 +129,15 @@ Namespace My.Resources
         Friend ReadOnly Property Ricochet() As System.IO.UnmanagedMemoryStream
             Get
                 Return ResourceManager.GetStream("Ricochet", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        '''</summary>
+        Friend ReadOnly Property Tank() As System.IO.UnmanagedMemoryStream
+            Get
+                Return ResourceManager.GetStream("Tank", resourceCulture)
             End Get
         End Property
     End Module

@@ -1,9 +1,10 @@
-﻿Public Class Brick
+﻿Imports System.Drawing.Drawing2D
+Public Class Brick
     Public x, y As Integer
     Public w, h As Integer
     Public mx, my As Single
     Public type As Integer
-    Public color As Pen
+    Public culoare As Pen
     Public position As Integer
     Public angle As Single
 
@@ -12,7 +13,7 @@
         h = hh
         x = xx
         y = yy
-        color = p
+        culoare = p
         position = pos
         mx = x + w / 2.0
         my = y + h / 2.0
@@ -29,16 +30,20 @@
     End Sub
 
     Public Sub SetColor(c As Pen)
-        color = c
+        culoare = c
     End Sub
 
     Public Sub Draw(e As PaintEventArgs)
         ' Daca e o caramida goala nu o desenam
         If type = Wall.TipuriCaramizi.EMPTY Then Return
 
-        Dim brush As New SolidBrush(color.Color)
+        Dim brush As New SolidBrush(culoare.Color)
+        Dim linGrBrush As New LinearGradientBrush(New Point(x, y), New Point(x + w, y + h), Color.WhiteSmoke, culoare.Color)
+        linGrBrush.SetSigmaBellShape(1)
+        Dim pen As New Pen(linGrBrush)
 
-        e.Graphics.FillRectangle(brush, x, y, w, h)
+
+        e.Graphics.FillRectangle(linGrBrush, x, y, w, h)
         e.Graphics.DrawRectangle(Pens.Black, x, y, w, h)
     End Sub
 End Class

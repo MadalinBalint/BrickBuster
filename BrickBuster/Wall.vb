@@ -30,11 +30,12 @@
     '11 - mingea se lipeste de paleta
     '12 - distruge toate caramizile pe orizontala
     '13 - distruge toate caramizile pe verticala
+    '14 - distruge paleta
     Public Enum TipuriCaramizi As Integer
         NORMAL
-        EMPTY
+        EMPTY ' 0 puncte
         TRIPLE
-        INFINITE
+        INFINITE ' 0 puncte
         LIFE
         SMALL_BALL
         BIG_BALL
@@ -42,6 +43,10 @@
         BIG_PADDLE
         SLOW_BALL
         FAST_BALL
+        STICKY_BALL ' anulat de PADDLE_DESTROYER
+        HORIZONTAL_DESTROYER
+        VERTICAL_DESTROYER
+        PADDLE_DESTROYER
     End Enum
 
     Private Function random(ByVal Min As Integer, ByVal Max As Integer) As Integer
@@ -49,10 +54,11 @@
         Return staticRandomGenerator.Next(Min, Max + 1)
     End Function
 
-    Public HP() As Integer = {1, 0, 3, Integer.MaxValue, 1, 1, 1, 1, 1}
-    Public Points() As Integer = {100, 0, 150, 10, 500, 400, 300, 700, 600}
-    Public Colors() As Pen = {Pens.LightGray, Pens.White, Pens.CadetBlue, Pens.Black, Pens.Red, Pens.Aqua, Pens.Azure, Pens.PaleVioletRed, Pens.PapayaWhip}
-    Public Percentage() As Integer = {50, 2, 9, 2, 2, 1, 1, 1, 1}
+    Public HP() As Integer = {1, 0, 3, Integer.MaxValue, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+    Public Points() As Integer = {100, 0, 150, 0, 500, 400, 300, 700, 600, 200, 200, 500, 1000, 800, 500}
+    Public Colors() As Pen = {Pens.LightGray, Pens.White, Pens.CadetBlue, Pens.Black, Pens.Red, Pens.Aqua, Pens.Azure, Pens.PaleVioletRed, Pens.PapayaWhip,
+                              Pens.Crimson, Pens.Cornsilk, Pens.Chocolate, Pens.Chartreuse, Pens.Coral, Pens.BurlyWood}
+    Public Percentage() As Integer = {50, 2, 5, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1}
 
     Public col, row As Integer
     Public matrixPozitie(,) As Brick  ' pozitia fiecarei caramizi pe ecran
@@ -154,7 +160,7 @@
         Dim mijloc As PointF
         Dim lista = New List(Of Brick)
 
-        For j As Integer = 0 To row - 1
+        For j As Integer = row - 1 To 0 Step -1
             For i As Integer = 0 To col - 1
                 ' Daca mai exista caramida (HP > 0) atunci o luam in considerare
                 If matrixHP(i, j) > 0 Then
@@ -186,6 +192,14 @@
             ' Pt fiecare HP distrus dam punctajul specific
             scor += Points(matrixType(i, j))
 
+            If matrixType(i, j) = TipuriCaramizi.INFINITE Then
+                My.Computer.Audio.Play(My.Resources.Tank, AudioPlayMode.Background)
+            ElseIf matrixType(i, j) >= TipuriCaramizi.LIFE Then
+                My.Computer.Audio.Play(My.Resources.Orchestr, AudioPlayMode.Background)
+            Else
+                My.Computer.Audio.Play(My.Resources.Glass, AudioPlayMode.Background)
+            End If
+
             If matrixType(i, j) = TipuriCaramizi.LIFE Then vieti += 1
             If matrixType(i, j) >= TipuriCaramizi.SMALL_BALL Then PowerUp = matrixType(i, j)
 
@@ -198,6 +212,18 @@
                     Form1.paleta.multiplier = 2
                 Case TipuriCaramizi.SMALL_PADDLE
                     Form1.paleta.multiplier = 0.5
+                Case TipuriCaramizi.FAST_BALL
+                    Form1.minge.speed_multiplier = 1.5
+                Case TipuriCaramizi.SLOW_BALL
+                    Form1.minge.speed_multiplier = 0.5
+                Case TipuriCaramizi.STICKY_BALL
+                    Form1.minge.sticky = True
+                Case TipuriCaramizi.HORIZONTAL_DESTROYER
+                Case TipuriCaramizi.VERTICAL_DESTROYER
+                Case TipuriCaramizi.PADDLE_DESTROYER
+                    Form1.minge.sticky = False
+                    Form1.paleta.visible = False
+
             End Select
 
             If matrixHP(i, j) < 0 Then matrixHP(i, j) = 0

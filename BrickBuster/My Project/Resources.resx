@@ -121,16 +121,28 @@
   <data name="Boing" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Boing.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="EndFx" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EndFx.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Fanfare" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Fanfare.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="FunnyBoy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FunnyBoy.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Glass" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Glass.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Orchestr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Orchestr.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Peow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Peow!.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Ricochet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ricochet.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Tank" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tank.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
