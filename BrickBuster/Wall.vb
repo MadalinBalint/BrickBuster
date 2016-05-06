@@ -1,6 +1,5 @@
 ﻿Public Class Wall
-    Public scor As Integer = 0 ' scorul acumulat
-    Public vieti As Integer ' cate vieti au mai ramas jucatorului
+
     Public PowerUp As TipuriCaramizi = TipuriCaramizi.EMPTY
 
     ' Variatia tipurilor de caramizi
@@ -28,9 +27,7 @@
     ' 9 - minge inceata 0.50x
     '10 - minge rapida 1.50x
     '11 - mingea se lipeste de paleta
-    '12 - distruge toate caramizile pe orizontala
-    '13 - distruge toate caramizile pe verticala
-    '14 - distruge paleta
+    '12 - distruge paleta
     Public Enum TipuriCaramizi As Integer
         NORMAL
         EMPTY ' 0 puncte
@@ -44,8 +41,6 @@
         SLOW_BALL
         FAST_BALL
         STICKY_BALL ' anulat de PADDLE_DESTROYER
-        HORIZONTAL_DESTROYER
-        VERTICAL_DESTROYER
         PADDLE_DESTROYER
     End Enum
 
@@ -54,11 +49,11 @@
         Return staticRandomGenerator.Next(Min, Max + 1)
     End Function
 
-    Public HP() As Integer = {1, 0, 3, Integer.MaxValue, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-    Public Points() As Integer = {100, 0, 150, 0, 500, 400, 300, 700, 600, 200, 200, 500, 1000, 800, 500}
+    Public HP() As Integer = {1, 0, 3, Integer.MaxValue, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+    Public Points() As Integer = {100, 0, 150, 0, 500, 400, 300, 700, 600, 200, 200, 500, 500}
     Public Colors() As Pen = {Pens.LightGray, Pens.White, Pens.CadetBlue, Pens.Black, Pens.Red, Pens.Aqua, Pens.Azure, Pens.PaleVioletRed, Pens.PapayaWhip,
-                              Pens.Crimson, Pens.Cornsilk, Pens.Chocolate, Pens.Chartreuse, Pens.Coral, Pens.BurlyWood}
-    Public Percentage() As Integer = {50, 2, 5, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1}
+                              Pens.Crimson, Pens.Cornsilk, Pens.Chocolate, Pens.BurlyWood}
+    Public Percentage() As Integer = {50, 2, 5, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1}
 
     Public col, row As Integer
     Public matrixScreenPosition(,) As Brick  ' pozitia fiecarei caramizi pe ecran
@@ -70,6 +65,7 @@
     Public brickWidth, brickHeight As Integer
     ' Spatiile pe orizontala si pe verticala intre caramizi
     Public hSpace, vSpace As Integer
+    Public menuSpace As Integer = 20 ' Spatiul ocupat de meniul programului
 
     Public Sub New(x As Integer, y As Integer, bw As Integer, bh As Integer, sh As Integer, sv As Integer)
         Dim xx, yy As Integer
@@ -88,7 +84,7 @@
         For j As Integer = 0 To row - 1
             For i As Integer = 0 To col - 1
                 xx = hSpace * (i + 1) + brickWidth * i
-                yy = vSpace * (j + 1) + brickHeight * j
+                yy = vSpace * (j + 1) + brickHeight * j + menuSpace
                 matrixBrickType(i, j) = TipuriCaramizi.NORMAL
                 matrixHitPoints(i, j) = HP(matrixBrickType(i, j))
                 matrixScreenPosition(i, j) = New Brick(xx, yy, brickWidth, brickHeight, Colors(matrixBrickType(i, j)), j * col + i)
@@ -190,17 +186,17 @@
             matrixHitPoints(i, j) -= hp
 
             ' Pt fiecare HP distrus dam punctajul specific
-            scor += Points(matrixBrickType(i, j))
+            Form1.scor += Points(matrixBrickType(i, j))
 
             If matrixBrickType(i, j) = TipuriCaramizi.INFINITE Then
-                My.Computer.Audio.Play(My.Resources.Tank, AudioPlayMode.Background)
+                If Form1.settings.soundfx Then My.Computer.Audio.Play(My.Resources.Tank, AudioPlayMode.Background)
             ElseIf matrixBrickType(i, j) >= TipuriCaramizi.LIFE Then
-                My.Computer.Audio.Play(My.Resources.Orchestr, AudioPlayMode.Background)
+                If Form1.settings.soundfx Then My.Computer.Audio.Play(My.Resources.Orchestr, AudioPlayMode.Background)
             Else
-                My.Computer.Audio.Play(My.Resources.Glass, AudioPlayMode.Background)
+                If Form1.settings.soundfx Then My.Computer.Audio.Play(My.Resources.Glass, AudioPlayMode.Background)
             End If
 
-            If matrixBrickType(i, j) = TipuriCaramizi.LIFE Then vieti += 1
+            If matrixBrickType(i, j) = TipuriCaramizi.LIFE Then Form1.vieti += 1
             If matrixBrickType(i, j) >= TipuriCaramizi.SMALL_BALL Then PowerUp = matrixBrickType(i, j)
 
             Select Case PowerUp
@@ -218,8 +214,6 @@
                     Form1.minge.speedMultiplier = 0.5
                 Case TipuriCaramizi.STICKY_BALL
                     Form1.minge.isSticky = True
-                Case TipuriCaramizi.HORIZONTAL_DESTROYER
-                Case TipuriCaramizi.VERTICAL_DESTROYER
                 Case TipuriCaramizi.PADDLE_DESTROYER
                     Form1.minge.isSticky = False
                     Form1.paleta.isVisible = False

@@ -23,83 +23,108 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
-        Me.SetariToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ballTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.menuBrickBuster = New System.Windows.Forms.MenuStrip()
+        Me.miGame = New System.Windows.Forms.ToolStripMenuItem()
         Me.miNewGame = New System.Windows.Forms.ToolStripMenuItem()
         Me.miResetGame = New System.Windows.Forms.ToolStripMenuItem()
+        Me.miEndGame = New System.Windows.Forms.ToolStripMenuItem()
+        Me.miScoreBoard = New System.Windows.Forms.ToolStripMenuItem()
+        Me.miOptions = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.IesireToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.InformatiiToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MenuStrip1.SuspendLayout()
+        Me.miExit = New System.Windows.Forms.ToolStripMenuItem()
+        Me.miAbout = New System.Windows.Forms.ToolStripMenuItem()
+        Me.menuBrickBuster.SuspendLayout()
         Me.SuspendLayout()
         '
-        'Timer1
+        'ballTimer
         '
-        Me.Timer1.Enabled = True
-        Me.Timer1.Interval = 10
+        Me.ballTimer.Enabled = True
+        Me.ballTimer.Interval = 10
         '
-        'MenuStrip1
+        'menuBrickBuster
         '
-        Me.MenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SetariToolStripMenuItem, Me.InformatiiToolStripMenuItem})
-        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(772, 28)
-        Me.MenuStrip1.TabIndex = 0
-        Me.MenuStrip1.Text = "MenuStrip1"
+        Me.menuBrickBuster.BackColor = System.Drawing.SystemColors.ButtonFace
+        Me.menuBrickBuster.ImageScalingSize = New System.Drawing.Size(20, 20)
+        Me.menuBrickBuster.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.miGame, Me.miAbout})
+        Me.menuBrickBuster.Location = New System.Drawing.Point(0, 0)
+        Me.menuBrickBuster.Name = "menuBrickBuster"
+        Me.menuBrickBuster.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
+        Me.menuBrickBuster.Size = New System.Drawing.Size(772, 28)
+        Me.menuBrickBuster.TabIndex = 0
+        Me.menuBrickBuster.Text = "MenuStrip1"
         '
-        'SetariToolStripMenuItem
+        'miGame
         '
-        Me.SetariToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.miNewGame, Me.miResetGame, Me.ToolStripMenuItem2, Me.ToolStripMenuItem3, Me.ToolStripSeparator1, Me.IesireToolStripMenuItem})
-        Me.SetariToolStripMenuItem.Name = "SetariToolStripMenuItem"
-        Me.SetariToolStripMenuItem.Size = New System.Drawing.Size(60, 24)
-        Me.SetariToolStripMenuItem.Text = "Game"
+        Me.miGame.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.miNewGame, Me.miResetGame, Me.miEndGame, Me.miScoreBoard, Me.miOptions, Me.ToolStripSeparator1, Me.miExit})
+        Me.miGame.Name = "miGame"
+        Me.miGame.ShortcutKeyDisplayString = ""
+        Me.miGame.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.G), System.Windows.Forms.Keys)
+        Me.miGame.Size = New System.Drawing.Size(60, 24)
+        Me.miGame.Text = "&Game"
         '
         'miNewGame
         '
         Me.miNewGame.Name = "miNewGame"
-        Me.miNewGame.Size = New System.Drawing.Size(181, 26)
-        Me.miNewGame.Text = "New game"
+        Me.miNewGame.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.N), System.Windows.Forms.Keys)
+        Me.miNewGame.Size = New System.Drawing.Size(209, 26)
+        Me.miNewGame.Text = "&New game"
+        Me.miNewGame.ToolTipText = "Deschide un joc nou"
         '
         'miResetGame
         '
         Me.miResetGame.Enabled = False
         Me.miResetGame.Name = "miResetGame"
-        Me.miResetGame.ShowShortcutKeys = False
-        Me.miResetGame.Size = New System.Drawing.Size(181, 26)
-        Me.miResetGame.Text = "Reset game"
+        Me.miResetGame.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.R), System.Windows.Forms.Keys)
+        Me.miResetGame.Size = New System.Drawing.Size(209, 26)
+        Me.miResetGame.Text = "&Reset game"
+        Me.miResetGame.ToolTipText = "Reseteaza jocul curent"
+        '
+        'miEndGame
+        '
+        Me.miEndGame.Enabled = False
+        Me.miEndGame.Name = "miEndGame"
+        Me.miEndGame.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.E), System.Windows.Forms.Keys)
+        Me.miEndGame.Size = New System.Drawing.Size(209, 26)
+        Me.miEndGame.Text = "&End game"
+        Me.miEndGame.ToolTipText = "Termina jocul curent"
+        '
+        'miScoreBoard
+        '
+        Me.miScoreBoard.Name = "miScoreBoard"
+        Me.miScoreBoard.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
+        Me.miScoreBoard.Size = New System.Drawing.Size(209, 26)
+        Me.miScoreBoard.Text = "&Scoreboard"
+        Me.miScoreBoard.ToolTipText = "Tabela cu scoruri"
+        '
+        'miOptions
+        '
+        Me.miOptions.Name = "miOptions"
+        Me.miOptions.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.O), System.Windows.Forms.Keys)
+        Me.miOptions.Size = New System.Drawing.Size(209, 26)
+        Me.miOptions.Text = "&Options"
+        Me.miOptions.ToolTipText = "Optiunile disponibile pentru joc"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(178, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(206, 6)
         '
-        'IesireToolStripMenuItem
+        'miExit
         '
-        Me.IesireToolStripMenuItem.Name = "IesireToolStripMenuItem"
-        Me.IesireToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
-        Me.IesireToolStripMenuItem.Text = "Exit"
+        Me.miExit.Name = "miExit"
+        Me.miExit.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.X), System.Windows.Forms.Keys)
+        Me.miExit.Size = New System.Drawing.Size(209, 26)
+        Me.miExit.Text = "E&xit"
+        Me.miExit.ToolTipText = "Iesire din program"
         '
-        'InformatiiToolStripMenuItem
+        'miAbout
         '
-        Me.InformatiiToolStripMenuItem.Name = "InformatiiToolStripMenuItem"
-        Me.InformatiiToolStripMenuItem.Size = New System.Drawing.Size(62, 24)
-        Me.InformatiiToolStripMenuItem.Text = "About"
-        '
-        'ToolStripMenuItem2
-        '
-        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(181, 26)
-        Me.ToolStripMenuItem2.Text = "Scoreboard"
-        '
-        'ToolStripMenuItem3
-        '
-        Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(181, 26)
-        Me.ToolStripMenuItem3.Text = "Options"
+        Me.miAbout.Name = "miAbout"
+        Me.miAbout.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.A), System.Windows.Forms.Keys)
+        Me.miAbout.Size = New System.Drawing.Size(62, 24)
+        Me.miAbout.Text = "&About"
+        Me.miAbout.ToolTipText = "Despre autorul acestui program"
         '
         'Form1
         '
@@ -107,30 +132,31 @@ Partial Class Form1
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.ClientSize = New System.Drawing.Size(772, 553)
-        Me.Controls.Add(Me.MenuStrip1)
+        Me.Controls.Add(Me.menuBrickBuster)
         Me.DoubleBuffered = True
         Me.KeyPreview = True
-        Me.MainMenuStrip = Me.MenuStrip1
+        Me.MainMenuStrip = Me.menuBrickBuster
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "Form1"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "BrickBuster"
-        Me.MenuStrip1.ResumeLayout(False)
-        Me.MenuStrip1.PerformLayout()
+        Me.menuBrickBuster.ResumeLayout(False)
+        Me.menuBrickBuster.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
 
-    Friend WithEvents Timer1 As Timer
-    Friend WithEvents MenuStrip1 As MenuStrip
-    Friend WithEvents SetariToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents InformatiiToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ballTimer As Timer
+    Friend WithEvents menuBrickBuster As MenuStrip
+    Friend WithEvents miGame As ToolStripMenuItem
+    Friend WithEvents miAbout As ToolStripMenuItem
     Friend WithEvents miNewGame As ToolStripMenuItem
     Friend WithEvents miResetGame As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
-    Friend WithEvents IesireToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem3 As ToolStripMenuItem
+    Friend WithEvents miExit As ToolStripMenuItem
+    Friend WithEvents miScoreBoard As ToolStripMenuItem
+    Friend WithEvents miOptions As ToolStripMenuItem
+    Friend WithEvents miEndGame As ToolStripMenuItem
 End Class

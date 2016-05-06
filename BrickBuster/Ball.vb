@@ -130,22 +130,22 @@ Public Class Ball
         End If
 
         ' Reflexie paleta
-        'If perete.Intersection(Me, paleta.caramida, New PointF(paleta.caramida.mx, paleta.caramida.my)) And paleta.visible Then
-        If y >= paleta.y - radius * sizeMultiplier And paleta.isVisible Then
-            If x >= paleta.x And x <= paleta.x + paleta.w * paleta.sizeMultiplier Then
-                If isSticky = True Then
-                    isMoving = False
-                    Return
-                End If
-
-                y = 2 * (paleta.y - radius * sizeMultiplier) - y
-                a = BrickBallAngle(paleta.caramida)
-                angle = Math.PI - angle + (Math.PI / 2.0 - a * Math.PI / 180.0) / 4.0
-
-                My.Computer.Audio.Play(My.Resources.Ricochet, AudioPlayMode.Background)
-                Console.WriteLine("Reflexie paleta: unghi=" & a)
+        If perete.Intersection(Me, paleta.caramida, New PointF(paleta.caramida.centerX, paleta.caramida.centerY)) And paleta.isVisible Then
+            'If y >= paleta.y - radius * sizeMultiplier And paleta.isVisible Then
+            'If x >= paleta.x And x <= paleta.x + paleta.w * paleta.sizeMultiplier Then
+            If isSticky = True Then
+                isMoving = False
                 Return
             End If
+
+            y = 2 * (paleta.y - radius * sizeMultiplier) - y
+            a = BrickBallAngle(paleta.caramida)
+            angle = Math.PI - angle + (Math.PI / 2.0 - a * Math.PI / 180.0) / 4.0
+
+            If Form1.settings.soundfx Then My.Computer.Audio.Play(My.Resources.Ricochet, AudioPlayMode.Background)
+            Console.WriteLine("Reflexie paleta: unghi=" & a)
+            Return
+            'End If
         End If
 
         ' Reflexie perete
@@ -153,27 +153,27 @@ Public Class Ball
             x = 2 * (clientWidth - radius * sizeMultiplier) - x
             angle = -angle
             Console.WriteLine("Reflexie perete: Metoda 4a")
-            My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
+            If Form1.settings.soundfx Then My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
         ElseIf x <= 0 Then
             x = 0
             angle = -angle
             Console.WriteLine("Reflexie perete: Metoda 3a")
-            My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
+            If Form1.settings.soundfx Then My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
         ElseIf y >= clientHeight - radius * sizeMultiplier Then
             y = 2 * (clientHeight - radius * sizeMultiplier) - y
             angle = Math.PI - angle
             Console.WriteLine("Reflexie perete: Metoda 2a")
-            My.Computer.Audio.Play(My.Resources.Fanfare, AudioPlayMode.Background)
+            If Form1.settings.soundfx Then My.Computer.Audio.Play(My.Resources.Fanfare, AudioPlayMode.Background)
             isStopped = True
             Return
-        ElseIf y <= 0 Then
-            y = 0
+        ElseIf y <= perete.menuSpace Then
+            y = perete.menuSpace
             angle = Math.PI - angle
             Console.WriteLine("Reflexie perete: Metoda 1a")
-            My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
+            If Form1.settings.soundfx Then My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
         End If
 
-        If angle = Math.PI Then
+        If angle = Math.PI Or angle = Math.PI / 2 Then
             angle = angle - Math.PI / 18
         ElseIf angle = 0 Then
             angle = Math.PI / 18
