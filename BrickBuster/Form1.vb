@@ -1,5 +1,5 @@
 ﻿Public Class Form1
-    Public settings As Config
+    Public settings As Config ' setarile jocului
     Public scor As Integer ' scorul acumulat
     Public vieti As Integer ' cate vieti au mai ramas jucatorului
     Public paleta As Paddle ' paleta cu care lovim mingea
@@ -13,9 +13,10 @@
     Public isKeyboard As Boolean = True ' daca folosim tastatura pt input
     Public mouseX As Integer ' pozitia mouse-ului pe X
 
+    ' Textul care se afiseaza in titlul ferestrei: dificultate, vieti, puncte
     Public Function gameTitle() As String
         If isGameStarted = False Then Return "BrickBuster"
-        Dim s = "BrickBuster - " & vieti & " vieti - " & scor & " puncte"
+        Dim s = "BrickBuster - " & settings.difficulty & " - " & vieti & " vieti - " & scor & " puncte"
         If isGamePaused Then Return s & " - PAUZA" Else Return s
     End Function
 
@@ -77,6 +78,7 @@
         Return False
     End Function
 
+    ' Determina un joc nou
     Public Sub NewGame()
         paleta = New Paddle(80, 15, Me.ClientSize.Width, Me.ClientSize.Height, Pens.LemonChiffon)
         minge = New Ball(20, Me.ClientSize.Width, Me.ClientSize.Height, Pens.Red)
@@ -94,6 +96,7 @@
         ballTimer.Stop()
     End Sub
 
+    ' Functie pentru desenarea obiectelor pe ecran
     Private Sub Form1_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
         If isGameStarted = False Then Return
 
@@ -125,6 +128,7 @@
                 miResetGame.Enabled = False
                 miEndGame.Enabled = False
 
+                ' Setam titlul si dam Refresh
                 Me.Text = gameTitle()
                 Me.Refresh()
                 Return
@@ -163,10 +167,12 @@
             settings.AddScore(scor)
             isGameStarted = False
         End If
+
         Me.Text = gameTitle()
         Me.Refresh()
     End Sub
 
+    ' Functie pentru miscarea mouse-ului
     Private Sub Form1_MouseMove(sender As Object, e As MouseEventArgs) Handles MyBase.MouseMove
         If isGameStarted = False Then Return
         If Not settings.mouse Then Return
@@ -177,6 +183,7 @@
         mouseX = e.X
     End Sub
 
+    ' Functie pentru click mouse
     Private Sub Form1_MouseClick(sender As Object, e As MouseEventArgs) Handles MyBase.MouseClick
         If isGameStarted = False Then Return
         If Not settings.mouse Then Return
@@ -191,6 +198,7 @@
         End Select
     End Sub
 
+    ' Meniul New Game
     Private Sub miNewGame_Click(sender As Object, e As EventArgs) Handles miNewGame.Click
         isGameStarted = True
         miNewGame.Enabled = False
@@ -201,6 +209,7 @@
         ballTimer.Start()
     End Sub
 
+    ' Meniul End Game
     Private Sub miEndGame_Click(sender As Object, e As EventArgs) Handles miEndGame.Click
         If isGameStarted = True Then
             If MsgBox("Doriti sa oprim jocul ?" & vbNewLine & "Veti pierde toate punctele acumulate pana acum.", MsgBoxStyle.YesNo, "Atentie") = MsgBoxResult.Yes Then
@@ -217,6 +226,7 @@
         End If
     End Sub
 
+    ' Meniul Reset Game
     Private Sub miResetGame_Click(sender As Object, e As EventArgs) Handles miResetGame.Click
         If isGameStarted = True Then
             If MsgBox("Doriti sa reluam jocul de la inceput ?" & vbNewLine & "Veti pierde toate punctele acumulate pana acum.", MsgBoxStyle.YesNo, "Atentie") = MsgBoxResult.Yes Then
@@ -227,6 +237,7 @@
         End If
     End Sub
 
+    ' Meniul Scoreboard
     Private Sub miScoreBoard_Click(sender As Object, e As EventArgs) Handles miScoreBoard.Click
         If isGameStarted = True Then
             isGamePaused = True
@@ -235,6 +246,7 @@
         Form2.ShowDialog()
     End Sub
 
+    ' Meniul Options
     Private Sub miOptions_Click(sender As Object, e As EventArgs) Handles miOptions.Click
         If isGameStarted = True Then
             isGamePaused = True
@@ -243,6 +255,7 @@
         Form3.ShowDialog()
     End Sub
 
+    ' Meniul Exit
     Private Sub miExit_Click(sender As Object, e As EventArgs) Handles miExit.Click
         If isGameStarted = True Then
             If MsgBox("Jocul tocmai a inceput !!!" & vbNewLine & "Doriti sa iesiti din joc ?", MsgBoxStyle.YesNo, "Atentie") = MsgBoxResult.Ok Then
@@ -254,6 +267,7 @@
         Me.Close()
     End Sub
 
+    ' Meniul About
     Private Sub miAbout_Click(sender As Object, e As EventArgs) Handles miAbout.Click
         MsgBox("Balint Madalin" & vbNewLine & "Grupa 3121A", 0, "Informatii autor")
     End Sub

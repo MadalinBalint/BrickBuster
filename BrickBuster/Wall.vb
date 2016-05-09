@@ -1,6 +1,5 @@
 ﻿Public Class Wall
-
-    Public PowerUp As TipuriCaramizi = TipuriCaramizi.EMPTY
+    Public PowerUp As TipuriCaramizi = TipuriCaramizi.EMPTY ' Ce powerup este activ cand se distruge o caramida
 
     ' Variatia tipurilor de caramizi
     ' 50% = caramizi normale
@@ -44,6 +43,7 @@
         PADDLE_DESTROYER
     End Enum
 
+    ' Functie pentru generarea de numere aleatorii
     Private Function random(ByVal Min As Integer, ByVal Max As Integer) As Integer
         Static staticRandomGenerator As New System.Random
         Return staticRandomGenerator.Next(Min, Max + 1)
@@ -55,18 +55,17 @@
                               Pens.Crimson, Pens.Cornsilk, Pens.Chocolate, Pens.BurlyWood}
     Public Percentage() As Integer = {50, 2, 5, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1}
 
-    Public col, row As Integer
+    Public col, row As Integer ' Nr de coloane si de randuri ale peretelui format din caramizi
     Public matrixScreenPosition(,) As Brick  ' pozitia fiecarei caramizi pe ecran
     Public matrixBrickType(,) As Integer  ' tipul fiecarei caramizi
     Public matrixHitPoints(,) As Integer  ' de cate ori trebuie lovita fiecare caramida ca sa fie distrusa
     Public matrixCenter(,) As PointF  ' mijlocul fiecarei caramizi, utilizat in detectia coliziunii
 
-    ' Dimensiunea unei caramizi
-    Public brickWidth, brickHeight As Integer
-    ' Spatiile pe orizontala si pe verticala intre caramizi
-    Public hSpace, vSpace As Integer
+    Public brickWidth, brickHeight As Integer ' Dimensiunea unei caramizi
+    Public horizSpace, vertSpace As Integer ' Spatiile pe orizontala si pe verticala intre caramizi
     Public menuSpace As Integer = 20 ' Spatiul ocupat de meniul programului
 
+    ' Constructorul pt clasa Wall
     Public Sub New(x As Integer, y As Integer, bw As Integer, bh As Integer, sh As Integer, sv As Integer)
         Dim xx, yy As Integer
         col = x
@@ -78,13 +77,13 @@
 
         brickWidth = bw
         brickHeight = bh
-        hSpace = sh
-        vSpace = sv
+        horizSpace = sh
+        vertSpace = sv
 
         For j As Integer = 0 To row - 1
             For i As Integer = 0 To col - 1
-                xx = hSpace * (i + 1) + brickWidth * i
-                yy = vSpace * (j + 1) + brickHeight * j + menuSpace
+                xx = horizSpace * (i + 1) + brickWidth * i
+                yy = vertSpace * (j + 1) + brickHeight * j + menuSpace
                 matrixBrickType(i, j) = TipuriCaramizi.NORMAL
                 matrixHitPoints(i, j) = HP(matrixBrickType(i, j))
                 matrixScreenPosition(i, j) = New Brick(xx, yy, brickWidth, brickHeight, Colors(matrixBrickType(i, j)), j * col + i)
@@ -122,6 +121,7 @@
         Next
     End Sub
 
+    ' Deseneaza caramizile pe ecran
     Public Sub Draw(e As PaintEventArgs)
         For j As Integer = 0 To row - 1
             For i As Integer = 0 To col - 1
@@ -130,6 +130,7 @@
         Next
     End Sub
 
+    ' Verifica coliziunea mingii cu o caramida
     Public Function Intersection(minge As Ball, caramida As Brick, rectangleCenter As PointF) As Boolean
         Dim w As Single = caramida.w / 2
         Dim h As Single = caramida.h / 2
@@ -150,7 +151,7 @@
     End Function
 
     ' Determina cu ce caramida se intersecteaza mingea in pozitia ei actuala
-    ' Returneaza caramida cu care se intersecteaza, altfel NULL
+    ' Returneaza o lista cu caramizile cu care se intersecteaza
     Public Function Collision(minge As Ball) As List(Of Brick)
         Dim caramida As Brick
         Dim mijloc As PointF
@@ -172,12 +173,14 @@
         Return lista
     End Function
 
+    ' Seteaza culoarea caramizii
     Public Sub SetBrickColor(position As Integer, color As Pen)
         Dim j = position \ col
         Dim i = position Mod col
         matrixScreenPosition(i, j).SetColor(color)
     End Sub
 
+    ' Marcheaza caramida ca fiind lovita si aplica powerup-urile necesare, de la caz la caz
     Public Sub HitBrick(position As Integer, hp As Integer)
         Dim j = position \ col
         Dim i = position Mod col
@@ -217,14 +220,13 @@
                 Case TipuriCaramizi.PADDLE_DESTROYER
                     Form1.minge.isSticky = False
                     Form1.paleta.isVisible = False
-
             End Select
 
             If matrixHitPoints(i, j) < 0 Then matrixHitPoints(i, j) = 0
         End If
     End Sub
 
-    ' Determinam daca e sfarsitul jocului/nivelului
+    ' Determina daca este sfarsitul jocului
     Public Function SfarsitJoc() As Boolean
         For j As Integer = 0 To row - 1
             For i As Integer = 0 To col - 1

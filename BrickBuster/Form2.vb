@@ -1,12 +1,12 @@
 ﻿Imports System.ComponentModel
 Public Class Form2
+    ' Incarcam tabela cu scorurile stocate in fisierul de configuratie si le sortam
     Public Sub TabelaScoruri()
         Dim n = Form1.settings.scoreboard.Count
         Dim s As String
         Dim i As Integer
         Dim separator() As String = {","}
         Dim rezultat() As String
-
 
         ' Stergem toate intrarile din tabela de scoruri
         tabelScoruri.Rows.Clear()
@@ -29,10 +29,12 @@ Public Class Form2
         tabelScoruri.Sort(newColumn, ListSortDirection.Descending)
     End Sub
 
+    ' Butonul Ok
     Private Sub btnScoreboardOk_Click(sender As Object, e As EventArgs) Handles btnScoreboardOk.Click
         Me.Close()
     End Sub
 
+    ' Afisam tabela de scoruri la pornirea form-ului
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         TabelaScoruri()
     End Sub

@@ -16,7 +16,7 @@ Public Class Ball
     Public x, y As Integer ' Pozitia bilei din coltul stanga sus
     Public radius As Integer ' Raza bilei
     Public ballColor As Pen ' Culoarea bilei
-    Public centerX, centerY, r As Single
+    Public centerX, centerY, r As Single ' Centrul bilei
 
     Public speed As Double ' Factorul de viteza al bilei (x1.0)
     Public angle As Double ' Unghiul sub care se misca bila (radiani)
@@ -44,19 +44,20 @@ Public Class Ball
     Public Sub SetPosition(xx As Integer, yy As Integer)
         x = xx
         y = yy
-        centerX = x + r * sizeMultiplier
-        centerY = y + r * sizeMultiplier
+        centerX = x + r * sizeMultiplier * Form1.settings.difficultySizeMultiplier
+        centerY = y + r * sizeMultiplier * Form1.settings.difficultySizeMultiplier
     End Sub
 
     ' Misca bila conform unghiului si vitezei
     Public Sub Move()
-        x += Math.Sin(angle) * speed * speedMultiplier
-        y += Math.Cos(angle) * speed * speedMultiplier
+        x += Math.Sin(angle) * speed * speedMultiplier * Form1.settings.difficultySpeedMultiplier
+        y += Math.Cos(angle) * speed * speedMultiplier * Form1.settings.difficultySpeedMultiplier
 
-        centerX = x + r * sizeMultiplier
-        centerY = y + r * sizeMultiplier
+        centerX = x + r * sizeMultiplier * Form1.settings.difficultySizeMultiplier
+        centerY = y + r * sizeMultiplier * Form1.settings.difficultySizeMultiplier
     End Sub
 
+    ' Calculeaza unghiul dintre centrul bilei si centrul caramizii in grade
     Public Function BrickBallAngle(caramida As Brick) As Single
         Dim dx = centerX - caramida.centerX
         Dim dy = -(centerY - caramida.centerY)
@@ -138,7 +139,7 @@ Public Class Ball
                 Return
             End If
 
-            y = 2 * (paleta.y - radius * sizeMultiplier) - y
+            y = 2 * (paleta.y - radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier) - y
             a = BrickBallAngle(paleta.caramida)
             angle = Math.PI - angle + (Math.PI / 2.0 - a * Math.PI / 180.0) / 4.0
 
@@ -149,8 +150,8 @@ Public Class Ball
         End If
 
         ' Reflexie perete
-        If x >= clientWidth - radius * sizeMultiplier Then
-            x = 2 * (clientWidth - radius * sizeMultiplier) - x
+        If x >= clientWidth - radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier Then
+            x = 2 * (clientWidth - radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier) - x
             angle = -angle
             Console.WriteLine("Reflexie perete: Metoda 4a")
             If Form1.settings.soundfx Then My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
@@ -159,8 +160,8 @@ Public Class Ball
             angle = -angle
             Console.WriteLine("Reflexie perete: Metoda 3a")
             If Form1.settings.soundfx Then My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
-        ElseIf y >= clientHeight - radius * sizeMultiplier Then
-            y = 2 * (clientHeight - radius * sizeMultiplier) - y
+        ElseIf y >= clientHeight - radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier Then
+            y = 2 * (clientHeight - radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier) - y
             angle = Math.PI - angle
             Console.WriteLine("Reflexie perete: Metoda 2a")
             If Form1.settings.soundfx Then My.Computer.Audio.Play(My.Resources.Fanfare, AudioPlayMode.Background)
@@ -184,7 +185,7 @@ Public Class Ball
     Sub Draw(e As PaintEventArgs)
         Dim brush As New SolidBrush(ballColor.Color)
 
-        e.Graphics.FillEllipse(brush, x, y, radius * sizeMultiplier, radius * sizeMultiplier)
-        e.Graphics.DrawEllipse(Pens.DarkSlateGray, x, y, radius * sizeMultiplier, radius * sizeMultiplier)
+        e.Graphics.FillEllipse(brush, x, y, radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier, radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier)
+        e.Graphics.DrawEllipse(Pens.DarkSlateGray, x, y, radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier, radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier)
     End Sub
 End Class

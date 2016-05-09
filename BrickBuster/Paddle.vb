@@ -1,13 +1,15 @@
 ﻿Public Class Paddle
-    Public x, y As Integer
-    Public w, h As Integer
-    Public paddleColor As Pen
-    Public clientHeight, clientWidth As Integer
-    Public vSpace As Integer = 5 ' Spatiul pe verticala
-    Public isMoving As Boolean = True
+    Public x, y As Integer ' Pozitia paletei
+    Public w, h As Integer ' Dimensiunile paletei
+    Public paddleColor As Pen ' Culoarea paletei
+    Public clientHeight, clientWidth As Integer ' Dimensiunea ferestrei client
+    Public vertSpace As Integer = 5 ' Spatiul pe verticala
+    Public isMoving As Boolean = True ' Daca paleta se misca
     Public caramida As Brick
     Public sizeMultiplier As Single ' Folosit in cazul POWERUP-urilor
     Public isVisible As Boolean = True ' Pt POWERUP-ul 'Paddle Destroyer'
+
+    ' Constructorul clasei Paddle
     Public Sub New(ww As Integer, hh As Integer, fw As Integer, fh As Integer, p As Pen)
         w = ww
         h = hh
@@ -18,12 +20,13 @@
 
         ' Centram paleta noastra si o punem cu 5 pixeli mai sus decat marginea de jos a ferestrei 
         x = (clientWidth - w * sizeMultiplier) / 2.0
-        y = clientHeight - h - vSpace
+        y = clientHeight - h - vertSpace
 
         ' 'Caramida' corespunzatoare paletei noastre pe care o folosim la detectia coliziunii cu mingea
         caramida = New Brick(x, y, w * sizeMultiplier, h, p, 0)
     End Sub
 
+    ' Deseneaza paleta pe ecran
     Public Sub Draw(e As PaintEventArgs)
         If isVisible = False Then Return
         Dim brush As New SolidBrush(paddleColor.Color)
@@ -32,6 +35,7 @@
         e.Graphics.DrawRectangle(Pens.Black, x, y, w * sizeMultiplier, h)
     End Sub
 
+    ' Miscam paleta pe ecran
     Public Sub Move(xx As Integer, yy As Integer)
         x += xx
         y += yy
