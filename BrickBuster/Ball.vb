@@ -68,22 +68,13 @@ Public Class Ball
     End Function
 
     ' Pozitia mingii fata de o caramida
-    ' Lasam cate +/- 5 grade de libertate fata de jumatatile de diagonala, pentru cazul in care lovim coltul caramizii
     Public Function RelativePosition(caramida As Brick) As PozitieMinge
         Dim angle = BrickBallAngle(caramida)
 
-        If angle >= caramida.angle + 5 And angle <= 180 - caramida.angle - 5 Then Return PozitieMinge.SUS
-        If angle >= 180 - caramida.angle + 5 And angle <= 180 + caramida.angle - 5 Then Return PozitieMinge.STANGA
-        If angle >= 180 + caramida.angle + 5 And angle <= 360 - caramida.angle - 5 Then Return PozitieMinge.JOS
-        If angle >= 360 - caramida.angle + 5 Or angle <= caramida.angle - 5 Then Return PozitieMinge.DREAPTA
-
-        ' In caz ca lovim colturile
-        If angle > caramida.angle - 5 And angle < caramida.angle + 5 Then Return PozitieMinge.COLT_DREAPTA_SUS
-        If angle > 180 - caramida.angle - 5 And angle < 180 - caramida.angle + 5 Then Return PozitieMinge.COLT_STANGA_SUS
-        If angle > 180 + caramida.angle - 5 And angle < 180 + caramida.angle + 5 Then Return PozitieMinge.COLT_STANGA_JOS
-        If angle > 360 - caramida.angle - 5 And angle < 360 - caramida.angle + 5 Then Return PozitieMinge.COLT_DREAPTA_JOS
-
-        Return PozitieMinge.INTERIOR
+        If angle >= caramida.angle And angle <= 180 - caramida.angle Then Return PozitieMinge.SUS
+        If angle > 180 - caramida.angle And angle <= 180 + caramida.angle Then Return PozitieMinge.STANGA
+        If angle > 180 + caramida.angle And angle <= 360 - caramida.angle Then Return PozitieMinge.JOS
+        If angle > 360 - caramida.angle Or angle < caramida.angle Then Return PozitieMinge.DREAPTA
     End Function
 
     ' Reflecta bila atunci cand intalneste un obstacol
@@ -118,35 +109,26 @@ Public Class Ball
                         angle = -angle
                         reflectat = True
                         Console.WriteLine("Metoda 2 " & pos.ToString & ", unghi=" & a)
-                    Else
-                        angle = a * 2.0 * Math.PI / 180.0 - angle
-                        reflectat = True
-                        Console.WriteLine("Fara metoda = " & pos.ToString & ", unghi=" & a)
                     End If
                 End If
 
                 perete.HitBrick(b.position, 1)
             Next
-            Return
+            'Return
         End If
 
         ' Reflexie paleta
         If perete.Intersection(Me, paleta.caramida, New PointF(paleta.caramida.centerX, paleta.caramida.centerY)) And paleta.isVisible Then
-            'If y >= paleta.y - radius * sizeMultiplier And paleta.isVisible Then
-            'If x >= paleta.x And x <= paleta.x + paleta.w * paleta.sizeMultiplier Then
             If isSticky = True Then
                 isMoving = False
                 Return
             End If
 
             y = 2 * (paleta.y - radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier) - y
-            a = BrickBallAngle(paleta.caramida)
-            angle = Math.PI - angle + (Math.PI / 2.0 - a * Math.PI / 180.0) / 4.0
+            angle = Math.PI - angle - Math.PI / 180.0 * (x - paleta.caramida.centerX)
 
             If Form1.settings.soundfx Then My.Computer.Audio.Play(My.Resources.Ricochet, AudioPlayMode.Background)
-            Console.WriteLine("Reflexie paleta: unghi=" & a)
-            Return
-            'End If
+            Console.WriteLine("Reflexie paleta: unghi=" & angle * 180.0 / Math.PI)
         End If
 
         ' Reflexie perete
@@ -172,12 +154,6 @@ Public Class Ball
             angle = Math.PI - angle
             Console.WriteLine("Reflexie perete: Metoda 1a")
             If Form1.settings.soundfx Then My.Computer.Audio.Play(My.Resources.Boing, AudioPlayMode.Background)
-        End If
-
-        If angle = Math.PI Or angle = Math.PI / 2 Then
-            angle = angle - Math.PI / 18
-        ElseIf angle = 0 Then
-            angle = Math.PI / 18
         End If
     End Sub
 
