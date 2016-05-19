@@ -50,7 +50,7 @@ Partial Class Form1
         Me.menuBrickBuster.Location = New System.Drawing.Point(0, 0)
         Me.menuBrickBuster.Name = "menuBrickBuster"
         Me.menuBrickBuster.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.menuBrickBuster.Size = New System.Drawing.Size(772, 28)
+        Me.menuBrickBuster.Size = New System.Drawing.Size(782, 28)
         Me.menuBrickBuster.TabIndex = 0
         Me.menuBrickBuster.Text = "MenuStrip1"
         '
@@ -131,7 +131,7 @@ Partial Class Form1
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.ClientSize = New System.Drawing.Size(772, 553)
+        Me.ClientSize = New System.Drawing.Size(782, 553)
         Me.Controls.Add(Me.menuBrickBuster)
         Me.DoubleBuffered = True
         Me.KeyPreview = True

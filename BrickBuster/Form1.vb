@@ -28,7 +28,7 @@
         If minge.isMoving = True Then Return
         minge.isMoving = True
 
-        minge.angle = Math.PI
+        minge.angle = Math.PI / 1.1
         minge.SetPosition(paleta.x + paleta.w * paleta.sizeMultiplier \ 2 - minge.radius * minge.sizeMultiplier \ 2, paleta.y - minge.radius * minge.sizeMultiplier - 2)
 
         If settings.soundfx Then My.Computer.Audio.Play(My.Resources.Peow, AudioPlayMode.Background)
@@ -80,9 +80,12 @@
 
     ' Determina un joc nou
     Public Sub NewGame()
+        perete = New Wall(12, 8, 50, 30, 5, 5)
+        Me.ClientSize = New Size(perete.brickWidth * perete.col + perete.horizSpace * (perete.col + 1), perete.brickHeight * (perete.row + 12))
+
         paleta = New Paddle(80, 15, Me.ClientSize.Width, Me.ClientSize.Height, Pens.LemonChiffon)
-        minge = New Ball(20, Me.ClientSize.Width, Me.ClientSize.Height, Pens.Red)
-        perete = New Wall(12, 2, 43, 25, 5, 5)
+        minge = New Ball(25, Me.ClientSize.Width, Me.ClientSize.Height, Pens.Red)
+
         vieti = 3
         scor = 0
 
@@ -137,7 +140,7 @@
             ' Aducem atributele fiecarei componente la valorile normale
             minge.isStopped = False
             minge.isMoving = False
-            minge.angle = Math.PI / 2.0
+            minge.angle = Math.PI / 6.0
             minge.speedMultiplier = 1.0
             minge.sizeMultiplier = 1.0
             minge.isSticky = False
@@ -270,5 +273,23 @@
     ' Meniul About
     Private Sub miAbout_Click(sender As Object, e As EventArgs) Handles miAbout.Click
         MsgBox("Balint Madalin" & vbNewLine & "Grupa 3121A", 0, "Informatii autor")
+    End Sub
+
+    Private Sub Form1_MouseLeave(sender As Object, e As EventArgs) 'Handles MyBase.MouseLeave
+        If isGameStarted = False Then Return
+        If Not settings.mouse Then Return
+
+        If mouseX < minge.clientWidth \ 2 Then
+            paleta.x = 0
+        Else
+            paleta.x = paleta.clientWidth - paleta.w * paleta.sizeMultiplier
+        End If
+
+        If minge.isMoving = False Then
+            ' Miscam mingea odata cu paleta, doar daca si paleta se misca
+            If paleta.isMoving = True Then
+                'minge.SetPosition(paleta.x + paleta.w * paleta.sizeMultiplier \ 2 - minge.radius * minge.sizeMultiplier \ 2, paleta.y - minge.radius * minge.sizeMultiplier - 2)
+            End If
+        End If
     End Sub
 End Class

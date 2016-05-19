@@ -2,16 +2,20 @@
     Public PowerUp As TipuriCaramizi = TipuriCaramizi.EMPTY ' Ce powerup este activ cand se distruge o caramida
 
     ' Variatia tipurilor de caramizi
-    ' 50% = caramizi normale
-    ' 50% = restul de caramizi, din care:
-    '     - 2% - caramizi lipsa
-    '     - 9% - caramizi cu HP=3
-    '     - 2% - caramizi cu HP infinit
-    '     - 2% - viata
-    '     - 1% - minge mica
-    '     - 1% - minge mare
-    '     - 1% - paleta mica
-    '     - 1% - paleta mare
+    ' majoritatea caramizi normale
+    ' - restul de caramizi, din care:
+    '     - 5 - caramizi lipsa
+    '     - 10 - caramizi cu HP=3
+    '     - 5 - caramizi cu HP infinit
+    '     - 3 - viata
+    '     - 1 - minge mica
+    '     - 1 - minge mare
+    '     - 1 - paleta mica
+    '     - 2 - paleta mare
+    '     - 1 - minge inceata
+    '     - 2 - minge rapida
+    '     - 1 - mingea se lipeste de paleta
+    '     - 1 - distruge paleta
 
     ' Tipuri de caramizi (de la 4 incolo avem POWERUP-uri)
     ' 0 - caramida obisnuita - HP=1
@@ -53,7 +57,7 @@
     Public Points() As Integer = {100, 0, 150, 0, 500, 400, 300, 700, 600, 200, 200, 500, 500}
     Public Colors() As Pen = {Pens.LightGray, Pens.White, Pens.CadetBlue, Pens.Black, Pens.Red, Pens.Aqua, Pens.Azure, Pens.PaleVioletRed, Pens.PapayaWhip,
                               Pens.Crimson, Pens.Cornsilk, Pens.Chocolate, Pens.BurlyWood}
-    Public Percentage() As Integer = {50, 2, 5, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1}
+    Public BrickNumber() As Integer = {0, 5, 10, 5, 3, 1, 1, 1, 2, 1, 2, 1, 1}
 
     Public col, row As Integer ' Nr de coloane si de randuri ale peretelui format din caramizi
     Public matrixScreenPosition(,) As Brick  ' pozitia fiecarei caramizi pe ecran
@@ -97,9 +101,8 @@
         Dim erow, ecol As Integer
 
         ' i = tipul caramizii speciale
-        For i As Integer = 1 To Percentage.Length - 1
-            nr = Percentage(i) * total / 100
-            nr += 1
+        For i As Integer = 1 To BrickNumber.Length - 1
+            nr = BrickNumber(i)
             For j As Integer = 0 To nr - 1
                 rnd = random(0, total - 1)
                 erow = rnd \ col

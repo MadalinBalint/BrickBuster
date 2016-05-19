@@ -31,7 +31,7 @@ Public Class Ball
     Public Sub New(rr As Integer, fw As Integer, fh As Integer, p As Pen)
         radius = rr
         ballColor = p
-        angle = Math.PI / 2.0
+        angle = Math.PI / 3.0
         speed = 4.0
         clientWidth = fw
         clientHeight = fh
@@ -125,7 +125,7 @@ Public Class Ball
             End If
 
             y = 2 * (paleta.y - radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier) - y
-            angle = Math.PI - angle - Math.PI / 180.0 * (x - paleta.caramida.centerX)
+            angle = Math.PI - angle '- Math.PI / 90.0 * (x - paleta.caramida.centerX)
 
             If Form1.settings.soundfx Then My.Computer.Audio.Play(My.Resources.Ricochet, AudioPlayMode.Background)
             Console.WriteLine("Reflexie paleta: unghi=" & angle * 180.0 / Math.PI)
@@ -161,7 +161,9 @@ Public Class Ball
     Sub Draw(e As PaintEventArgs)
         Dim brush As New SolidBrush(ballColor.Color)
 
-        e.Graphics.FillEllipse(brush, x, y, radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier, radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier)
-        e.Graphics.DrawEllipse(Pens.DarkSlateGray, x, y, radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier, radius * sizeMultiplier * Form1.settings.difficultySizeMultiplier)
+        Dim rr = r * 2 * sizeMultiplier * Form1.settings.difficultySizeMultiplier
+
+        e.Graphics.FillEllipse(brush, x, y, rr, rr)
+        e.Graphics.DrawEllipse(Pens.DarkSlateGray, x, y, rr, rr)
     End Sub
 End Class
