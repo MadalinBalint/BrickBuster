@@ -108,8 +108,8 @@
         ' Daca am pus pauza nu mai miscam mingea
         If minge.isMoving = True And isGamePaused = False Then
             ' Tinem cont de pozitia paletei si de caramizile existente
-            minge.Bounce(paleta, caramizi, perete)
             minge.Move()
+            minge.Bounce(paleta, caramizi, perete)
         End If
 
         ' Daca cumva atingem partea de jos a ecranului, pierdem o viata
